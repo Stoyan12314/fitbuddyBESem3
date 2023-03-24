@@ -1,16 +1,11 @@
 package org.example.buisness;
 
-import org.example.controller.RequestsResponds.CreateUserRequest;
-import org.example.controller.RequestsResponds.CreateUserResponse;
-import org.example.controller.RequestsResponds.GetUserResponse;
+import org.example.domain.User;
+
+import java.util.Optional;
 
 public interface UserManager {
 
-        GetUserResponse getUsers();
+        Optional<User> getUser(Long id);
 
-        void deleteById(long userId);
-
-
-
-    CreateUserResponse createUser(CreateUserRequest request);
 }
