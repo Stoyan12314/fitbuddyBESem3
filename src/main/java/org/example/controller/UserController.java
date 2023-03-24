@@ -2,42 +2,43 @@ package org.example.controller;
 
 import lombok.AllArgsConstructor;
 import org.example.buisness.UserManager;
-import org.example.controller.RequestsResponds.CreateUserRequest;
-import org.example.controller.RequestsResponds.CreateUserResponse;
 import org.example.controller.RequestsResponds.GetUserResponse;
-import org.springframework.http.HttpStatus;
+import org.example.domain.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
     private final UserManager userManager;
 
 
-    @GetMapping
-    public ResponseEntity<GetUserResponse> getUsers()
+    @GetMapping("{id}")
+    public ResponseEntity<GetUserResponse> getUser( @Valid @PathVariable Long id)
     {
-        return ResponseEntity.ok(userManager.getUsers());
+
+        Optional<User> user = userManager.getUser(id);
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        GetUserResponse response = GetUserResponse.builder()
+                .firstName(user.get().getFirstName())
+                .lastName(user.get().getLastName())
+                .email(user.get().getEmail())
+                .password(user.get().getPassword())
+                .build();
+        return ResponseEntity.ok(response);
+
     }
 
 
-    @DeleteMapping("{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable int userId)
-    {
-        userManager.deleteById(userId);
-        return ResponseEntity.noContent().build();
-    }
 
-
-    @PostMapping()
-    public ResponseEntity<CreateUserResponse> createUser(@RequestBody @Valid CreateUserRequest request)
-    {
-        CreateUserResponse response = userManager.createUser(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/exercises")
 @AllArgsConstructor
 public class ExerciseController {

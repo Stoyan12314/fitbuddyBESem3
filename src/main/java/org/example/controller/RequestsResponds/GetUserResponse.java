@@ -14,5 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetUserResponse {
-    private List<User> users;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String password;
 }

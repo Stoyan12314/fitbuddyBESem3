@@ -1,13 +1,15 @@
 package org.example.persistence;
 
+import org.example.domain.User;
 import org.example.persistence.entity.UserEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
-    List<UserEntity> findAll();
+    User findUserByEmail(String email);
 
-    void deleteById(long exerciseId);
+    Optional<User> findUserById(Long id);
 
-    UserEntity saveUser(UserEntity user);
+    UserEntity saveUser(User user);
 }
