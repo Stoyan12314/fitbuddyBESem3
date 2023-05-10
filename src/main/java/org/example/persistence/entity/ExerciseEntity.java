@@ -22,7 +22,7 @@ public class ExerciseEntity {
 
     private String description;
 
-    private String picture;
+    private String imageUrl;
 
 
 

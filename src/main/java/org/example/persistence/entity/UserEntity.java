@@ -13,23 +13,26 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+//@Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+   // @Column(name = "id")
     private Long id;
     @NotBlank
     @Length(min = 2 ,max = 50)
-    @Column(name = "email")
+   // @Column(name = "email")
     private String email;
-    @Column(name = "password")
+    @NotBlank
+   // @Column(name = "password")
     private String password;
-    @Column(name = "firstName")
-    private String firstName;
-    @Column(name = "lastName")
-    private String lastName;
 
+    @NotBlank
+   // @Column(name = "firstName")
+    private String firstName;
+    @NotBlank
+   // @Column(name = "lastName")
+    private String lastName;
 
     @Column(name = "role", columnDefinition = "ENUM('CUSTOMER', 'TRAINER', 'ADMINISTRATION')")
     @Enumerated(EnumType.STRING)

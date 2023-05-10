@@ -1,6 +1,5 @@
 package org.example.controller.converters;
 
-import org.example.controller.RequestsResponds.GetUserResponse;
 import org.example.domain.Exercise;
 import org.example.domain.User;
 import org.example.persistence.entity.ExerciseEntity;
@@ -18,6 +17,17 @@ public class UserConverter {
     {
         return User.builder()
                 .id(user.getId())
+                .password(user.getPassword())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .build();
+    }
+    public static UserEntity convertToEntity(User user) {
+        return UserEntity.builder()
+
+                .password(user.getPassword())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
@@ -25,16 +35,4 @@ public class UserConverter {
                 .build();
     }
 
-    public static ResponseEntity<GetUserResponse> convert(Optional<UserEntity> optionalUserEntity) {
-        if (optionalUserEntity.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        User user = convert(optionalUserEntity.get());
-        GetUserResponse response = GetUserResponse.builder()
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .build();
-        return ResponseEntity.ok(response);
-    }
 }

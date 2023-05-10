@@ -13,10 +13,11 @@ public class Exercise {
     private Long id;
 
     private String name;
+    private String imageUrl;
 
     private String description;
 
-    private String picture;
+
 
 
 

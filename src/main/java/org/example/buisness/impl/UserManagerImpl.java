@@ -25,6 +25,6 @@ public class UserManagerImpl implements UserManager {
     @Override
     public Optional<User> getUser(Long id)
     {
-        return repo.findUserById(id);
+        return repo.findUserById(id).map(UserConverter::convert);
     }
 }

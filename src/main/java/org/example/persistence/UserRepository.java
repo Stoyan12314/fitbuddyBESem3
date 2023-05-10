@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
-    User findUserByEmail(String email);
+    UserEntity findUserByEmail(String email);
 
-    Optional<User> findUserById(Long id);
+    Optional<UserEntity> findUserById(Long id);
 
     UserEntity saveUser(User user);
 }

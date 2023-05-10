@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Data
-@Builder
-@Getter
-@Setter
+
 public class CreateExerciseResponse {
-    private String status;
+    private Long id;
 }

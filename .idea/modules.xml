@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fontys.sem3.individualAssignment.main.iml" filepath="$PROJECT_DIR$/.idea/modules/fontys.sem3.individualAssignment.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/individualAssignment.main.iml" filepath="$PROJECT_DIR$/.idea/modules/individualAssignment.main.iml" />
     </modules>
   </component>

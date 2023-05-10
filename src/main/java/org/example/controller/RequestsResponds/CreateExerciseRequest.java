@@ -12,18 +12,13 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 public class CreateExerciseRequest {
-    @Min(1)
-    @Max(100000)
-    private Long id;
+
 
     @NotNull
     private String name;
 
     @NotNull
     private String description;
-    @NotNull
-    private String picture;
-
 
 
 

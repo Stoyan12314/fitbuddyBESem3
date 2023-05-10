@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.buisness.impl.UserManagerImplTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-03-03T16:17:53" hostname="DESKTOP-MSEMH7G" time="0.431">
-  <properties/>
-  <testcase name="testCreateUser()" classname="org.example.buisness.impl.UserManagerImplTest" time="0.431"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
