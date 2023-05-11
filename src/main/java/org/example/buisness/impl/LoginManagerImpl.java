@@ -1,11 +1,15 @@
 package org.example.buisness.impl;
 
 import lombok.AllArgsConstructor;
+<<<<<<< HEAD
 import org.example.buisness.AccessTokenEncoder;
+=======
+>>>>>>> development
 import org.example.buisness.Exceptions.InvalidCredentialsException;
 import org.example.buisness.LoginManager;
 import org.example.controller.RequestsResponds.LoginRequest;
 import org.example.controller.RequestsResponds.LoginResponse;
+<<<<<<< HEAD
 import org.example.controller.UserController;
 import org.example.controller.converters.UserConverter;
 import org.example.domain.AccessToken;
@@ -26,11 +30,19 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+=======
+import org.example.domain.User;
+import org.example.persistence.UserRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+>>>>>>> development
 @Service
 @AllArgsConstructor
 public class LoginManagerImpl implements LoginManager {
 
     private final UserRepository userRepository;
+<<<<<<< HEAD
     private final PasswordEncoder passwordEncoder;
     private final AccessTokenEncoder accessTokenEncoder;
     @Override
@@ -70,4 +82,15 @@ public class LoginManagerImpl implements LoginManager {
     }
 
 
+=======
+    @Override
+    public LoginResponse login(LoginRequest loginRequest) {
+        User user = userRepository.findUserByEmail(loginRequest.getEmail());
+
+        LoginResponse request = new LoginResponse();
+        request.setStatus("logged!");
+        return request;
+
+    }
+>>>>>>> development
 }

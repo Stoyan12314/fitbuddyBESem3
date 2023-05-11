@@ -23,6 +23,10 @@ public class RegisterController {
     @PostMapping
     public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> development
         RegisterResponse registerResponse = RegisterResponse.builder()
                 .id(registerManager.createUser(registerRequest).getId())
                 .build();
