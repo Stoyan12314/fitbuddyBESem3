@@ -1,9 +1,7 @@
 package org.example.controller.converters;
 
 import org.example.controller.RequestsResponds.GetUserResponse;
-import org.example.domain.Exercise;
 import org.example.domain.User;
-import org.example.persistence.entity.ExerciseEntity;
 import org.example.persistence.entity.UserEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -13,9 +11,7 @@ public class UserConverter {
     private UserConverter() {
     }
 
-
-    public static User convert(UserEntity user)
-    {
+    public static User convert(UserEntity user) {
         return User.builder()
                 .id(user.getId())
                 .password(user.getPassword())
@@ -25,10 +21,9 @@ public class UserConverter {
                 .role(user.getRole())
                 .build();
     }
-<<<<<<< HEAD
+
     public static UserEntity convertToEntity(User user) {
         return UserEntity.builder()
-
                 .password(user.getPassword())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -36,8 +31,6 @@ public class UserConverter {
                 .role(user.getRole())
                 .build();
     }
-
-=======
 
     public static ResponseEntity<GetUserResponse> convert(Optional<UserEntity> optionalUserEntity) {
         if (optionalUserEntity.isEmpty()) {
@@ -51,5 +44,4 @@ public class UserConverter {
                 .build();
         return ResponseEntity.ok(response);
     }
->>>>>>> development
 }

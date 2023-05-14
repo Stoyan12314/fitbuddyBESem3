@@ -7,10 +7,4 @@ import java.util.List;
 
 public interface JPAExerciseRepository extends JpaRepository<ExerciseEntity, Long> {
 
-<<<<<<< HEAD
-
-=======
-    List<ExerciseEntity> findAllBy();
->>>>>>> development
-
 }

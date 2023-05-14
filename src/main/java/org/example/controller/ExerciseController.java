@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.example.buisness.Exceptions.CreateExerciseException;
 import org.example.buisness.Exceptions.UpdateExerciseException;
 import org.example.buisness.ExerciseManager;
+import org.example.buisness.impl.CloudinaryManagerImpl;
 import org.example.controller.RequestsResponds.*;
 import org.example.controller.converters.ExerciseConverter;
 import org.example.domain.Exercise;
@@ -28,7 +29,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ExerciseController {
     private final ExerciseManager exerciseManager;
-    private final Cloudinary cloudinary;
+    private final CloudinaryManagerImpl cloudinary;
 
     @GetMapping("/{exerciseId}")
     public ResponseEntity<GetExerciseResponse> getExercise(@PathVariable int exerciseId)
@@ -53,6 +54,8 @@ public class ExerciseController {
             return ResponseEntity.noContent().build();
         }
         else{
+            System.out.println("Exercises " + exercises.get(0));
+
             GetExercisesResponse response = new GetExercisesResponse(exercises);
             return ResponseEntity.ok(response);
         }
@@ -69,18 +72,19 @@ public class ExerciseController {
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<CreateExerciseResponse> createExercise(@RequestPart("exercise") @Valid CreateExerciseRequest request, @RequestPart("file") MultipartFile file)
     {
+        System.out.println("MultipartFile" + file);
         // Upload the image file to Cloudinary
         String imageUrl = null;
-        if (file != null && !file.isEmpty()) {
-            try {
-                Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-                imageUrl = (String) uploadResult.get("url");
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
+        try {
+            imageUrl = cloudinary.uploadImage(file);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-//move it to a buisness logic- manager class
-        // Set the imageUrl to the exerciseRequestConverted object
+
+
+        System.out.println("Exercise image url: " + imageUrl);
+
+
         Exercise exerciseRequestConverted = ExerciseConverter.convert(request);
         exerciseRequestConverted.setImageUrl(imageUrl);
 

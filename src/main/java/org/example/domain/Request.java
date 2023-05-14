@@ -15,9 +15,9 @@ public class Request {
 
     private Long id;
 
-    private LocalDateTime date;
-    private User user;
-    private Exercise exercise;
+    private LocalDate date;
+    private Long userId;
+    private Long exerciseId;
 
     private Integer reps;
 

@@ -11,29 +11,15 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-<<<<<<< HEAD
-=======
-@RequestMapping("/login")
->>>>>>> development
 @AllArgsConstructor
 public class LoginController {
 
     private final LoginManager loginManager;
 
-<<<<<<< HEAD
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest)
-    {
-
-
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         LoginResponse loginResponse = loginManager.login(loginRequest);
         System.out.println("LoginRequest: " + loginResponse.getAccessToken());
-=======
-    @PostMapping
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest)
-    {
-        LoginResponse loginResponse = loginManager.login(loginRequest);
->>>>>>> development
         return ResponseEntity.ok(loginResponse);
     }
 

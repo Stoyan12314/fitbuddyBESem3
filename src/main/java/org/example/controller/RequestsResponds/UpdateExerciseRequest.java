@@ -15,5 +15,7 @@ public class UpdateExerciseRequest {
     @NotBlank
     private String description;
 
+    @NotBlank
+    private String imageUrl;
 
 }

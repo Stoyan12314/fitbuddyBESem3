@@ -2,6 +2,7 @@ package org.example.persistence.entity;
 
 import lombok.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.persistence.*;
 
 @Getter
@@ -30,13 +31,5 @@ public class RequestEntity {
 
     @Column(name = "date")
     private LocalDate date;
-
-    @ManyToOne()
-   // @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private UserEntity userEntity;
-
-    @ManyToOne()
-  //  @JoinColumn(name = "exercise_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private ExerciseEntity exerciseEntity;
 
 }

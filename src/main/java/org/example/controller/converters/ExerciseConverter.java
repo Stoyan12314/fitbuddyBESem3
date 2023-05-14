@@ -14,8 +14,7 @@ public class ExerciseConverter {
         return Exercise.builder()
                 .id(exercise.getId())
                 .name(exercise.getName())
-              //  .imageUrl(exercise.getImageUrl()) // Add imageUrl
-
+                .imageUrl(exercise.getImageUrl()) // Add imageUrl
                 .description(exercise.getDescription())
                 .build();
     }
@@ -30,10 +29,10 @@ public class ExerciseConverter {
     }
 
 
-    public static Exercise convert(ExerciseEntity exercise) {
+    public static Exercise convertExercise(ExerciseEntity exercise) {
         return Exercise.builder()
                 .id(exercise.getId())
-               // .imageUrl(exercise.getImageUrl()) // Add imageUrl
+                .imageUrl(exercise.getImageUrl()) // Add imageUrl
 
                 .name(exercise.getName())
                 .description(exercise.getDescription())
@@ -43,7 +42,7 @@ public class ExerciseConverter {
     public static ExerciseEntity convertToEntity(Exercise exercise) {
         return ExerciseEntity.builder()
                 .id(exercise.getId())
-              //  .imageUrl(exercise.getImageUrl()) // Add imageUrl
+                .imageUrl(exercise.getImageUrl()) // Add imageUrl
 
                 .name(exercise.getName())
                 .description(exercise.getDescription())

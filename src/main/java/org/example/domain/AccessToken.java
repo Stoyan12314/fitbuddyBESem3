@@ -17,4 +17,6 @@ public class AccessToken {
     private String subject;
     private List<String> roles;
     private Long userId;
+
+
 }
