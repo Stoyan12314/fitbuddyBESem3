@@ -3,10 +3,8 @@ package org.example.persistence.impl;
 
 
 import lombok.AllArgsConstructor;
-import org.example.buisness.Exceptions.CreateExerciseException;
-import org.example.buisness.Exceptions.DeleteExerciseException;
-import org.example.buisness.Exceptions.UpdateExerciseException;
 import org.example.controller.converters.ExerciseConverter;
+import org.example.controller.dto.UpdateExerciseRequest;
 import org.example.domain.Exercise;
 import org.example.persistence.ExerciseRepo;
 import org.example.persistence.JPAExerciseRepository;
@@ -29,8 +27,14 @@ public class ExerciseRepositoryImpl implements ExerciseRepo {
     }
 
     @Override
-    public Optional<ExerciseEntity> findById(long exerciseId) {
-        return jpaExerciseRepository.findById(exerciseId);
+    public ExerciseEntity findById(long exerciseId) {
+
+        Optional<ExerciseEntity> exercise = jpaExerciseRepository.findById(exerciseId);
+        if (exercise.isPresent()) {
+            return exercise.get();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -41,35 +45,21 @@ public class ExerciseRepositoryImpl implements ExerciseRepo {
 
         ExerciseEntity exerciseEntity = ExerciseConverter.convertToEntity(request);
 
+        return jpaExerciseRepository.save(exerciseEntity).getId();
 
-
-        try {
-            return jpaExerciseRepository.save(exerciseEntity).getId();
-        }
-        catch (Exception e){
-            throw new CreateExerciseException("Error while creating exercise");
-        }
     }
 
     @Override
-    public void updateExercise(Exercise exercise) {
-        ExerciseEntity exerciseEntity = ExerciseConverter.convertToEntity(exercise);
-        try {
-            jpaExerciseRepository.save(exerciseEntity);
-        }
-        catch (Exception e){
-            throw new UpdateExerciseException("Error while updating exercise");
-        }
+    public void updateExercise(UpdateExerciseRequest exercise) {
+        ExerciseEntity exerciseEntity = ExerciseConverter.convertUpdate(exercise);
+        jpaExerciseRepository.save(exerciseEntity);
+
     }
 
     @Override
     public void deleteExercise(long exerciseId) {
-        try {
-            jpaExerciseRepository.deleteById(exerciseId);
-        }
-        catch (Exception e){
-            throw new DeleteExerciseException("Error while deleting the exercise");
-        }
+        jpaExerciseRepository.deleteById(exerciseId);
+
     }
 
 }

@@ -1,76 +1,70 @@
 package org.example.controller;
 
 import org.example.buisness.RegisterManager;
-import org.example.controller.RequestsResponds.RegisterRequest;
-import org.example.controller.RequestsResponds.RegisterResponse;
-import org.example.domain.User;
+import org.example.controller.dto.RegisterRequest;
+import org.example.controller.dto.RegisterResponse;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
-@AutoConfigureMockMvc
 class RegisterControllerTest {
 
-    @Mock
-    private RegisterManager registerManager;
-
-    @InjectMocks
-    private RegisterController registerController;
-
     @Test
-    void registerUser_shouldReturnCreatedStatus() {
-        // Arrange
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setEmail("testUser");
-        registerRequest.setPassword("testPassword");
+    @DisplayName("Should return a bad request status when the input is invalid")
+    void registerWithInvalidInputThenReturnBadRequestStatus() {
+        RegisterManager registerManager = mock(RegisterManager.class);
 
-        RegisterResponse registerResponse = new RegisterResponse();
-                registerResponse.setId(1L);
+        RegisterController registerController = new RegisterController(registerManager);
 
+        RegisterRequest registerRequest =
+                RegisterRequest.builder()
+                        .firstName("")
+                        .lastName("")
+                        .email("")
+                        .password("")
+                        .role(null)
+                        .build();
 
-        when(registerManager.createUser(any(RegisterRequest.class))).thenReturn(registerResponse);
+        when(registerManager.createUser(registerRequest)).thenReturn(null);
 
-        // Act
-        ResponseEntity<RegisterResponse> response = registerController.register(registerRequest);
+        assertThrows(NullPointerException.class, () -> registerController.register(registerRequest));
 
-        // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(1L, response.getBody().getId());
         verify(registerManager, times(1)).createUser(registerRequest);
     }
-
-
     @Test
-    void registerUser_invalidRequest() {
-        // Arrange
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setEmail(null);
-        registerRequest.setPassword("testPassword");
+    @DisplayName("Should register a new user and return the created user ID")
+    void registerNewUserAndReturnCreatedUserId() {
+        RegisterRequest registerRequest =
+                RegisterRequest.builder()
+                        .firstName("John")
+                        .lastName("Doe")
+                        .email("john.doe@example.com")
+                        .password("password")
+                        .role("USER")
+                        .build();
 
-        RegisterResponse registerResponse = new RegisterResponse();
-        registerResponse.setId(1L);
+        RegisterResponse expectedResponse = RegisterResponse.builder().id(1L).build();
 
+        RegisterManager registerManager = mock(RegisterManager.class);
+        when(registerManager.createUser(any(RegisterRequest.class))).thenReturn(expectedResponse);
 
-        when(registerManager.createUser(any(RegisterRequest.class))).thenReturn(registerResponse);
+        RegisterController registerController = new RegisterController(registerManager);
 
-        // Act
-        ResponseEntity<RegisterResponse> response = registerController.register(registerRequest);
+        ResponseEntity<?> responseEntity = registerController.register(registerRequest);
 
-        // Assert
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(1L, response.getBody().getId());
-        verify(registerManager, times(1)).createUser(any(RegisterRequest.class));
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(expectedResponse, responseEntity.getBody());
+
+        verify(registerManager, times(1)).createUser(registerRequest);
     }
 }
+

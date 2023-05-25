@@ -1,18 +1,17 @@
 package org.example.buisness.impl;
 
 import lombok.AllArgsConstructor;
+import org.example.buisness.exceptions.CreateExerciseException;
+import org.example.buisness.exceptions.NotFoundExerciseException;
 import org.example.buisness.ExerciseManager;
-import org.example.controller.RequestsResponds.CreateExerciseRequest;
-import org.example.controller.RequestsResponds.CreateExerciseResponse;
-import org.example.controller.RequestsResponds.GetExercisesResponse;
 import org.example.controller.converters.ExerciseConverter;
+import org.example.controller.dto.UpdateExerciseRequest;
 import org.example.domain.Exercise;
 import org.example.persistence.ExerciseRepo;
 import org.example.persistence.entity.ExerciseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,9 +19,15 @@ public class ExerciseManagerImpl implements ExerciseManager {
 
     private ExerciseRepo exerciseRepo;
 
+
     @Override
-    public Optional<Exercise> getExercise(long id) {
-        return exerciseRepo.findById(id).map(ExerciseConverter::convertExercise);
+    public Exercise getExercise(long id) {
+            ExerciseEntity   exercise =  exerciseRepo.findById(id);
+            if(exercise == null)
+            {
+                throw new NotFoundExerciseException();
+            }
+            return ExerciseConverter.convertExercise(exercise);
     }
 
     @Override
@@ -32,16 +37,24 @@ public class ExerciseManagerImpl implements ExerciseManager {
 
     @Override
     public void deleteExerciseById(long exerciseId) {
+
         exerciseRepo.deleteExercise(exerciseId);
     }
 
     @Override
-    public Long createExercise(Exercise request) {
-        return exerciseRepo.createExercise(request);
+    public Long createExercise(Exercise request)
+    {
+        Long id = exerciseRepo.createExercise(request);
+        if (id == null)
+        {
+            throw new CreateExerciseException();
+        }
+        return id;
     }
 
     @Override
-    public void updateExercise(Exercise exercise) {
+    public void updateExercise(UpdateExerciseRequest exercise) {
+
         exerciseRepo.updateExercise(exercise);
     }
 

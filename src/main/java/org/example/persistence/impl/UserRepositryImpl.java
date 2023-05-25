@@ -2,15 +2,13 @@
 package org.example.persistence.impl;
 
 import lombok.AllArgsConstructor;
-import org.example.controller.converters.UserConverter;
-import org.example.domain.User;
-import org.example.persistence.JPAExerciseRepository;
+
 import org.example.persistence.JPAUserRepository;
 import org.example.persistence.UserRepository;
 import org.example.persistence.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+
 import java.util.Optional;
 
 @Repository
@@ -31,15 +29,14 @@ public class UserRepositryImpl implements UserRepository {
 
     @Override
     public Optional<UserEntity> findUserById(Long id) {
-        Optional<UserEntity> entity = jpaRepo.findById(id);
-        return entity;
+
+                return jpaRepo.findById(id);
+
     }
 
     @Override
     public UserEntity saveUser(UserEntity user) {
-        System.out.println("User: " + user);
 
-        System.out.println("userEntity: " + user);
         jpaRepo.save(user);
         return user;
     }

@@ -2,7 +2,7 @@ package org.example.controller;
 
 import lombok.AllArgsConstructor;
 import org.example.buisness.UserManager;
-import org.example.controller.RequestsResponds.GetUserResponse;
+import org.example.controller.dto.GetUserResponse;
 import org.example.domain.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,22 +19,22 @@ public class UserController {
 
 
     @GetMapping("{id}")
-    public ResponseEntity<GetUserResponse> getUser( @Valid @PathVariable Long id)
+    public ResponseEntity<GetUserResponse> getUser(@Valid @PathVariable Long id)
     {
 
         Optional<User> user = userManager.getUser(id);
+        if (user.isPresent()) {
+            GetUserResponse response = GetUserResponse.builder()
+                    .firstName(user.get().getFirstName())
+                    .lastName(user.get().getLastName())
+                    .email(user.get().getEmail())
+                    .password(user.get().getPassword())
+                    .build();
 
-        if (user == null) {
+            return ResponseEntity.ok(response);
+        } else {
             return ResponseEntity.notFound().build();
         }
-
-        GetUserResponse response = GetUserResponse.builder()
-                .firstName(user.get().getFirstName())
-                .lastName(user.get().getLastName())
-                .email(user.get().getEmail())
-                .password(user.get().getPassword())
-                .build();
-        return ResponseEntity.ok(response);
 
     }
 

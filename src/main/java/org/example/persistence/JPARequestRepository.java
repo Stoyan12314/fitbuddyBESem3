@@ -1,6 +1,5 @@
 package org.example.persistence;
 
-import org.example.persistence.entity.ExerciseEntity;
 import org.example.persistence.entity.RequestEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +12,4 @@ public interface JPARequestRepository  extends JpaRepository<RequestEntity, Long
     List<RequestEntity> getUserExercises(@Param("id") Long id);
 
 
-
-    @Query("DELETE  FROM RequestEntity r WHERE r.exerciseId = :id")
-    void deleteExercise(@Param("id") Long id);
 }

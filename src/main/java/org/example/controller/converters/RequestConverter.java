@@ -1,14 +1,11 @@
 package org.example.controller.converters;
 
-import org.example.controller.RequestsResponds.CreateRequestRequest;
-import org.example.domain.Exercise;
+import org.example.controller.dto.CreateRequestRequest;
 import org.example.domain.Request;
-import org.example.domain.User;
 import org.example.persistence.entity.RequestEntity;
-import org.example.persistence.entity.UserEntity;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RequestConverter {
@@ -41,7 +38,7 @@ public class RequestConverter {
 
     public static List<Request> convert(List<RequestEntity> requestEntities) {
         if (requestEntities == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         List<Request> requests = new ArrayList<>();

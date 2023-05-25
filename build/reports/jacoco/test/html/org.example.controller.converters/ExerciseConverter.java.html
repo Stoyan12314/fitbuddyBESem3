@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExerciseConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">individualAssignment</a> &gt; <a href="index.source.html" class="el_package">org.example.controller.converters</a> &gt; <span class="el_source">ExerciseConverter.java</span></div><h1>ExerciseConverter.java</h1><pre class="source lang-java linenums">package org.example.controller.converters;
+
+import org.example.controller.dto.CreateExerciseRequest;
+import org.example.controller.dto.UpdateExerciseRequest;
+import org.example.domain.Exercise;
+import org.example.persistence.entity.ExerciseEntity;
+
+public class ExerciseConverter {
+    private ExerciseConverter() {
+    }
+
+
+    public static Exercise convert(UpdateExerciseRequest exercise) {
+<span class="nc" id="L14">        return Exercise.builder()</span>
+<span class="nc" id="L15">                .id(exercise.getId())</span>
+<span class="nc" id="L16">                .name(exercise.getName())</span>
+<span class="nc" id="L17">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
+<span class="nc" id="L18">                .description(exercise.getDescription())</span>
+<span class="nc" id="L19">                .build();</span>
+    }
+    public static Exercise convert(CreateExerciseRequest exercise) {
+<span class="nc" id="L22">        return Exercise.builder()</span>
+
+<span class="nc" id="L24">                .name(exercise.getName())</span>
+               // .imageUrl(exercise.getImageUrl()) // Add imageUrl
+
+<span class="nc" id="L27">                .description(exercise.getDescription())</span>
+<span class="nc" id="L28">                .build();</span>
+    }
+
+
+    public static Exercise convertExercise(ExerciseEntity exercise) {
+<span class="fc" id="L33">        return Exercise.builder()</span>
+<span class="fc" id="L34">                .id(exercise.getId())</span>
+<span class="fc" id="L35">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
+
+<span class="fc" id="L37">                .name(exercise.getName())</span>
+<span class="fc" id="L38">                .description(exercise.getDescription())</span>
+<span class="fc" id="L39">                .build();</span>
+    }
+
+    public static ExerciseEntity convertToEntity(Exercise exercise) {
+<span class="nc" id="L43">        return ExerciseEntity.builder()</span>
+<span class="nc" id="L44">                .id(exercise.getId())</span>
+<span class="nc" id="L45">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
+
+<span class="nc" id="L47">                .name(exercise.getName())</span>
+<span class="nc" id="L48">                .description(exercise.getDescription())</span>
+<span class="nc" id="L49">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

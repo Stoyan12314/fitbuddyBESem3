@@ -1,12 +1,8 @@
 package org.example.buisness;
 
-import org.example.controller.RequestsResponds.CreateRequestRequest;
-import org.example.controller.RequestsResponds.RequestResponse;
-import org.example.domain.AccessToken;
+import org.example.controller.dto.CreateRequestRequest;
+import org.example.controller.dto.RequestResponse;
 import org.example.domain.Request;
-import org.example.persistence.RequestRepository;
-import org.example.persistence.entity.RequestEntity;
-
 import java.util.List;
 
 public interface RequestManager {

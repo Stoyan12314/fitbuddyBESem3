@@ -1,21 +1,11 @@
 package org.example.security.auth;
 
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.example.buisness.AccessTokenDecoder;
-import org.example.buisness.AccessTokenEncoder;
 
-import org.example.buisness.Exceptions.InvalidAccessTokenException;
+import org.example.buisness.exceptions.InvalidAccessTokenException;
 import org.example.domain.AccessToken;
-import org.example.domain.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +32,7 @@ public class AuthenticationRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+
 
         final String requestTokenHeader = request.getHeader("Authorization");
         if (requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer ")) {

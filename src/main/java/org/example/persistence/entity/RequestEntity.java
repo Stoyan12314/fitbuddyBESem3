@@ -2,7 +2,6 @@ package org.example.persistence.entity;
 
 import lombok.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import javax.persistence.*;
 
 @Getter

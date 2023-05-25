@@ -1,13 +1,9 @@
 package org.example.controller;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
-import org.example.buisness.Exceptions.CreateExerciseException;
-import org.example.buisness.Exceptions.UpdateExerciseException;
 import org.example.buisness.ExerciseManager;
 import org.example.buisness.impl.CloudinaryManagerImpl;
-import org.example.controller.RequestsResponds.*;
+import org.example.controller.dto.*;
 import org.example.controller.converters.ExerciseConverter;
 import org.example.domain.Exercise;
 import org.example.security.isauthenticated.IsAuthenticated;
@@ -18,10 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
 
 @RestController
 @CrossOrigin("http://localhost:3000")
@@ -34,8 +28,8 @@ public class ExerciseController {
     @GetMapping("/{exerciseId}")
     public ResponseEntity<GetExerciseResponse> getExercise(@PathVariable int exerciseId)
     {
-        Optional<Exercise> exercise = exerciseManager.getExercise(exerciseId);
-        if (exercise.isEmpty()){
+        Exercise exercise = exerciseManager.getExercise(exerciseId);
+        if (exercise == null ){
             return ResponseEntity.noContent().build();
         }
         else{
@@ -54,13 +48,13 @@ public class ExerciseController {
             return ResponseEntity.noContent().build();
         }
         else{
-            System.out.println("Exercises " + exercises.get(0));
 
             GetExercisesResponse response = new GetExercisesResponse(exercises);
             return ResponseEntity.ok(response);
         }
     }
-
+    @IsAuthenticated
+    @RolesAllowed("ROLE_ADMINISTRATION")
     @DeleteMapping("{exerciseId}")
     public ResponseEntity<Void> deleteExercise(@PathVariable int exerciseId)
     {
@@ -72,44 +66,37 @@ public class ExerciseController {
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<CreateExerciseResponse> createExercise(@RequestPart("exercise") @Valid CreateExerciseRequest request, @RequestPart("file") MultipartFile file)
     {
-        System.out.println("MultipartFile" + file);
-        // Upload the image file to Cloudinary
         String imageUrl = null;
-        try {
-            imageUrl = cloudinary.uploadImage(file);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
-
-        System.out.println("Exercise image url: " + imageUrl);
-
-
+        imageUrl = cloudinary.uploadImage(file);
         Exercise exerciseRequestConverted = ExerciseConverter.convert(request);
         exerciseRequestConverted.setImageUrl(imageUrl);
-
         CreateExerciseResponse createExerciseResponse = new CreateExerciseResponse();
-        try {
-            createExerciseResponse.setId(exerciseManager.createExercise(exerciseRequestConverted));
-        } catch (CreateExerciseException e) {
-            return ResponseEntity.noContent().build();
-        }
+        createExerciseResponse.setId(exerciseManager.createExercise(exerciseRequestConverted));
         return ResponseEntity.status(HttpStatus.CREATED).body(createExerciseResponse);
-
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<Void> updateExercise(@PathVariable("id") final Long id,
-                                               @RequestBody @Valid UpdateExerciseRequest request) {
-        request.setId(id);
-
-        Exercise exercise = ExerciseConverter.convert(request);
-        try {
-            exerciseManager.updateExercise(exercise);
-        }
-        catch (UpdateExerciseException e){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.noContent().build();
+@IsAuthenticated
+@RolesAllowed("ROLE_ADMINISTRATION")
+@PutMapping("/{exerciseId}")
+public ResponseEntity<UpdateExerciseResponse> updateExercise(@PathVariable int exerciseId, @RequestPart("exercise") @Valid UpdateExerciseRequest request, @RequestPart(value = "file", required = false) MultipartFile file)
+{
+    String imageUrl = null;
+    Exercise ex =  exerciseManager.getExercise(exerciseId);
+    if (file != null && !file.isEmpty()) {
+        imageUrl = cloudinary.uploadImage(file);
+    } else {
+        imageUrl = ex.getImageUrl();
     }
+    UpdateExerciseRequest test = new UpdateExerciseRequest();
+    test.setId(Long.valueOf(exerciseId));
+    test.setName(request.getName());
+    test.setDescription(request.getDescription());
+    test.setImageUrl(imageUrl);
+    exerciseManager.updateExercise(test);
+    return ResponseEntity.status(HttpStatus.OK).body(new UpdateExerciseResponse(Long.valueOf(exerciseId)));
+
+}
+
+
+
 }

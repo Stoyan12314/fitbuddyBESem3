@@ -1,110 +1,74 @@
 package org.example.controller;
 
-import org.example.buisness.Exceptions.InvalidCredentialsException;
+import com.github.dockerjava.api.exception.UnauthorizedException;
 import org.example.buisness.LoginManager;
-import org.example.buisness.UserManager;
-import org.example.buisness.impl.LoginManagerImpl;
-import org.example.controller.RequestsResponds.LoginRequest;
-import org.example.controller.RequestsResponds.LoginResponse;
-import org.example.domain.Role;
-import org.example.domain.User;
-import org.example.persistence.UserRepository;
-import org.example.persistence.entity.UserEntity;
+import org.example.controller.dto.LoginRequest;
+import org.example.controller.dto.LoginResponse;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
-@AutoConfigureMockMvc
 class LoginControllerTest {
-//    @Autowired
-//    private MockMvc mockMvc;
-//    @MockBean
-//    private RequestManager requestManager;
-
-
-//
-//    @Mock
-//    private LoginManager loginManager;
-//
-@Mock
-private LoginManager loginManager;
-
-@InjectMocks
-private LoginController loginController;
-
-
 
     @Test
-    void loginTest_shouldReturnTrue() {
-        // Arrange
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("testUser");
-        loginRequest.setPassword("testPassword");
+    @DisplayName("Should return a bad request response when the login request is invalid")
+    void loginWhenLoginRequestIsInvalid() {
+        LoginManager loginManager = mock(LoginManager.class);
+        LoginController loginController = new LoginController(loginManager);
+        LoginRequest loginRequest = new LoginRequest("", "");
 
-        LoginResponse expectedResponse = new LoginResponse();
-        expectedResponse.setAccessToken("testToken");
+        ResponseEntity<LoginResponse> responseEntity = loginController.login(loginRequest);
 
-        when(loginManager.login(any(LoginRequest.class))).thenReturn(expectedResponse);
+        assertEquals(400, responseEntity.getStatusCodeValue());
+        assertNull(responseEntity.getBody());
+        verifyNoInteractions(loginManager);
+    }
 
-        // Act
-        ResponseEntity<LoginResponse> response = loginController.login(loginRequest);
+    @Test
+    @DisplayName("Should return an bad request response when the credentials are incorrect")
+    void loginWhenCredentialsAreIncorrect() {
+        LoginManager loginManager = mock(LoginManager.class);
+        LoginController loginController = new LoginController(loginManager);
+        LoginRequest loginRequest = new LoginRequest("test@example.com", "password");
 
-        // Assert
-        assertEquals(expectedResponse, response.getBody());
+        ResponseEntity<LoginResponse> responseEntity = loginController.login(loginRequest);
+
+        assertNull(responseEntity.getBody());
+        assertEquals(400, responseEntity.getStatusCodeValue());
         verify(loginManager, times(1)).login(loginRequest);
     }
 
-//    @Test
-//    void login_userNotFound() {
-//        // Arrange
-//        LoginRequest loginRequest = new LoginRequest();
-//        loginRequest.setEmail("testUser");
-//        loginRequest.setPassword("testPassword");
-//
-//        when(loginManager.login(any(LoginRequest.class))).thenReturn(null);
-//
-//        // Act
-//        ResponseEntity<LoginResponse> response = loginController.login(loginRequest);
-//
-//        // Assert
-//        assertNull(response.getBody());
-//        verify(loginManager, times(1)).login(loginRequest);
-//    }
 
     @Test
-    void login_invalidRequest() {
-        // Arrange
-        LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail(null);
-        loginRequest.setPassword("testPassword");
+    @DisplayName("Should return a valid login response when the credentials are correct")
+    void loginWhenCredentialsAreCorrect() {
+        LoginManager loginManager = mock(LoginManager.class);
+        LoginController loginController = new LoginController(loginManager);
+        LoginRequest loginRequest =
+                LoginRequest.builder().email("test@example.com").password("password").build();
+        LoginResponse expectedLoginResponse =
+                LoginResponse.builder()
+                        .accessToken("access_token")
+                        .roles(List.of("ROLE_USER"))
+                        .userId(1L)
+                        .build();
+        when(loginManager.login(loginRequest)).thenReturn(expectedLoginResponse);
 
-        LoginResponse expectedResponse = new LoginResponse();
-        expectedResponse.setAccessToken("testToken");
+        ResponseEntity<LoginResponse> responseEntity = loginController.login(loginRequest);
 
-        when(loginManager.login(any(LoginRequest.class))).thenReturn(expectedResponse);
-
-        // Act
-        ResponseEntity<LoginResponse> response = loginController.login(loginRequest);
-
-        // Assert
-        assertEquals(expectedResponse, response.getBody());
-        verify(loginManager, times(1)).login(any(LoginRequest.class));
+        assertEquals(expectedLoginResponse, responseEntity.getBody());
+        assertEquals(200, responseEntity.getStatusCodeValue());
+        assertNull(responseEntity.getHeaders().get("Authorization"));
+        verify(loginManager, times(1)).login(loginRequest);
     }
-
-
-
 }
+

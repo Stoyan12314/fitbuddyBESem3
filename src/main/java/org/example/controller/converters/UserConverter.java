@@ -1,6 +1,6 @@
 package org.example.controller.converters;
 
-import org.example.controller.RequestsResponds.GetUserResponse;
+import org.example.controller.dto.GetUserResponse;
 import org.example.domain.User;
 import org.example.persistence.entity.UserEntity;
 import org.springframework.http.ResponseEntity;

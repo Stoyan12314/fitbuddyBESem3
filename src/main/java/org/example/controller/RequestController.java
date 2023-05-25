@@ -1,17 +1,14 @@
 package org.example.controller;
 
 import lombok.AllArgsConstructor;
-import org.example.buisness.RegisterManager;
 import org.example.buisness.RequestManager;
-import org.example.controller.RequestsResponds.*;
-import org.example.domain.Exercise;
+import org.example.controller.dto.*;
 import org.example.domain.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -23,10 +20,7 @@ public class RequestController {
     @GetMapping("/{userId}")
     public ResponseEntity<GetRequestsResponse> getExercise(@PathVariable int userId)
     {
-        System.out.println("User id for requesting exercises: " + userId);
-
         List<Request> request = requestManager.getUserExercises(userId);
-        System.out.println("Fetched " + request.size() + " requests");
         if (request.isEmpty()){
             return ResponseEntity.noContent().build();
         }
@@ -37,9 +31,9 @@ public class RequestController {
         }
     }
     @DeleteMapping("/{id}")
-    public void DeleteExercise(@PathVariable int exerciseId)
+    public void deleteExercise(@PathVariable int id)
     {
-        requestManager.deleteExercise(exerciseId);
+        requestManager.deleteExercise(id);
     }
     @PostMapping
     public ResponseEntity<RequestResponse> createRequest(@RequestBody @Valid CreateRequestRequest requestRequest)

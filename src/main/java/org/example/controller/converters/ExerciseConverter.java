@@ -1,7 +1,7 @@
 package org.example.controller.converters;
 
-import org.example.controller.RequestsResponds.CreateExerciseRequest;
-import org.example.controller.RequestsResponds.UpdateExerciseRequest;
+import org.example.controller.dto.CreateExerciseRequest;
+import org.example.controller.dto.UpdateExerciseRequest;
 import org.example.domain.Exercise;
 import org.example.persistence.entity.ExerciseEntity;
 
@@ -10,8 +10,8 @@ public class ExerciseConverter {
     }
 
 
-    public static Exercise convert(UpdateExerciseRequest exercise) {
-        return Exercise.builder()
+    public static ExerciseEntity convertUpdate(UpdateExerciseRequest exercise) {
+        return ExerciseEntity.builder()
                 .id(exercise.getId())
                 .name(exercise.getName())
                 .imageUrl(exercise.getImageUrl()) // Add imageUrl

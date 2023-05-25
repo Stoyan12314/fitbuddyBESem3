@@ -1,16 +1,12 @@
 package org.example.buisness.impl;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.example.buisness.AccessTokenDecoder;
 import org.example.buisness.AccessTokenEncoder;
-import org.example.buisness.Exceptions.InvalidAccessTokenException;
+import org.example.buisness.exceptions.InvalidAccessTokenException;
 import org.example.domain.AccessToken;
-import org.example.domain.RefreshToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -57,30 +53,8 @@ public class AccessTokenEncoderDecoderImpl implements AccessTokenEncoder, Access
                 .compact();
     }
 
-    public String encodeRefreshToken(RefreshToken refreshToken) {
-        Instant now = Instant.now();
 
-        return Jwts.builder()
-                .setSubject(refreshToken.getSubject())
-                .setId(Long.toString(refreshToken.getUserId()))
-                .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(now.plus(7, ChronoUnit.DAYS))) // Set a longer expiration for refresh tokens
-                .signWith(key)
-                .compact();
-    }
-    public RefreshToken decodeRefreshToken(String refreshTokenEncoded) {
-        try {
-            Jwt jwt = Jwts.parserBuilder().setSigningKey(key).build().parse(refreshTokenEncoded);
-            Claims claims = (Claims) jwt.getBody();
 
-            return RefreshToken.builder()
-                    .subject(claims.getSubject())
-                    .userId(Long.parseLong(claims.getId()))
-                    .build();
-        } catch (JwtException e) {
-            throw new InvalidAccessTokenException(e.getMessage());
-        }
-    }
 
 
 
@@ -89,18 +63,16 @@ public class AccessTokenEncoderDecoderImpl implements AccessTokenEncoder, Access
     @Override
     public AccessToken decode(String accessTokenEncoded) {
         try {
-            Jwt jwt = Jwts.parserBuilder().setSigningKey(key).build().parse(accessTokenEncoded);
-            Claims claims = (Claims) jwt.getBody();
-
-            List<String> role = claims.get("roles", List.class);
-
+            Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessTokenEncoded);
+            Claims claims = jws.getBody();
+            List<String> roles = claims.get("roles", List.class);
             return AccessToken.builder()
                     .subject(claims.getSubject())
-                    .roles(role)
+                    .roles(roles)
                     .userId(claims.get("userId", Long.class))
                     .build();
         } catch (JwtException e) {
-            throw new InvalidAccessTokenException(e.getMessage());
+            throw new InvalidAccessTokenException();
         }
     }
 }

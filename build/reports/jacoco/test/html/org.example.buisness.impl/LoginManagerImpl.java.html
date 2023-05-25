@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoginManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">individualAssignment</a> &gt; <a href="index.source.html" class="el_package">org.example.buisness.impl</a> &gt; <span class="el_source">LoginManagerImpl.java</span></div><h1>LoginManagerImpl.java</h1><pre class="source lang-java linenums">package org.example.buisness.impl;
+
+import lombok.AllArgsConstructor;
+import org.example.buisness.AccessTokenEncoder;
+import org.example.buisness.exceptions.InvalidCredentialsException;
+import org.example.buisness.LoginManager;
+import org.example.controller.dto.LoginRequest;
+import org.example.controller.dto.LoginResponse;
+import org.example.controller.converters.UserConverter;
+import org.example.domain.AccessToken;
+import org.example.domain.User;
+import org.example.persistence.UserRepository;
+import org.example.persistence.entity.UserEntity;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Service
+<span class="fc" id="L23">@AllArgsConstructor</span>
+public class LoginManagerImpl implements LoginManager {
+
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
+    private final AccessTokenEncoder accessTokenEncoder;
+    @Override
+    public LoginResponse login(LoginRequest loginRequest) {
+
+<span class="nc" id="L33">        UserEntity user = userRepository.findUserByEmail(loginRequest.getEmail());</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        if(user == null)</span>
+        {
+<span class="nc" id="L36">            throw new InvalidCredentialsException();</span>
+        }
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        if(!matchesPassword(loginRequest.getPassword(), user.getPassword()))</span>
+        {
+<span class="nc" id="L41">            throw new InvalidCredentialsException();</span>
+        }
+<span class="nc" id="L43">        String accessToken = generateAccessToken(UserConverter.convert(user));</span>
+<span class="nc" id="L44">        List&lt;String&gt; roles = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L45">        roles.add(user.getRole().toString());</span>
+<span class="nc" id="L46">        return LoginResponse.builder().accessToken(accessToken)</span>
+<span class="nc" id="L47">                .roles(roles)</span>
+<span class="nc" id="L48">                .userId(user.getId())</span>
+<span class="nc" id="L49">                .build();</span>
+    }
+    private String generateAccessToken(User user) {
+
+<span class="nc" id="L53">        List&lt;String&gt; roles = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L54">        roles.add(user.getRole().toString());</span>
+<span class="nc" id="L55">        return accessTokenEncoder.encode(</span>
+<span class="nc" id="L56">                AccessToken.builder()</span>
+<span class="nc" id="L57">                        .subject(user.getEmail())</span>
+<span class="nc" id="L58">                        .roles(roles)</span>
+<span class="nc" id="L59">                        .userId(user.getId())</span>
+
+<span class="nc" id="L61">                        .build());</span>
+    }
+
+    private boolean matchesPassword(String rawPassword, String encodedPassword) {
+<span class="nc" id="L65">        return passwordEncoder.matches(rawPassword, encodedPassword);</span>
+    }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

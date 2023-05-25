@@ -1,12 +1,11 @@
 package org.example.buisness.impl;
 
 import lombok.AllArgsConstructor;
+import org.example.buisness.exceptions.EmptyListExercises;
 import org.example.buisness.RequestManager;
-import org.example.controller.RequestsResponds.CreateRequestRequest;
-import org.example.controller.RequestsResponds.LoginResponse;
-import org.example.controller.RequestsResponds.RequestResponse;
+import org.example.controller.dto.CreateRequestRequest;
+import org.example.controller.dto.RequestResponse;
 import org.example.controller.converters.RequestConverter;
-import org.example.domain.AccessToken;
 import org.example.domain.Request;
 import org.example.persistence.RequestRepository;
 import org.example.persistence.entity.RequestEntity;
@@ -29,7 +28,11 @@ public class RequestManagerImpl implements RequestManager {
     public List<Request> getUserExercises(long userId)
     {
         List<RequestEntity> requests = requestRepository.getUserExercises(userId);
-        System.out.println("requests " + requests.get(0));
+
+        if (requests.isEmpty()) {
+            throw new EmptyListExercises();
+        }
+
         return RequestConverter.convert(requests);
     }
     @Override

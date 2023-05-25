@@ -1,7 +1,7 @@
 package org.example.buisness;
 
-import org.example.controller.RequestsResponds.RegisterRequest;
-import org.example.controller.RequestsResponds.RegisterResponse;
+import org.example.controller.dto.RegisterRequest;
+import org.example.controller.dto.RegisterResponse;
 
 public interface RegisterManager {
 

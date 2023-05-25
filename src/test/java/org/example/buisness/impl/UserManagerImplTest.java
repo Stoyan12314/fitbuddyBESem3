@@ -1,58 +1,72 @@
 package org.example.buisness.impl;
 
-import org.example.controller.converters.UserConverter;
+
+import org.example.domain.Role;
 import org.example.domain.User;
 import org.example.persistence.UserRepository;
 import org.example.persistence.entity.UserEntity;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-
 class UserManagerImplTest {
 
+    @Mock
+    private UserRepository userRepository;
+
+    @InjectMocks
+    private UserManagerImpl userManager;
+
     @Test
-    void getUserByIdFound() {
-        // Arrange
-        UserRepository userRepositoryMock = mock(UserRepository.class);
+    @DisplayName("Should return an empty optional when the user with the given id does not exist")
+    void getUserWhenUserDoesNotExist() {
+        Long userId = 1L;
+        when(userRepository.findUserById(userId)).thenReturn(Optional.empty());
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
+        Optional<User> user = userManager.getUser(userId);
 
-        Optional<UserEntity> expectedResult = Optional.of(userEntity);
-
-        when(userRepositoryMock.findUserById(1L)).thenReturn(expectedResult);
-
-        UserManagerImpl userManager = new UserManagerImpl(userRepositoryMock);
-
-        // Act
-        Optional<User> actualResult = userManager.getUser(1L);
-
-        // Assert
-        assertEquals(expectedResult.map(UserConverter::convert), actualResult);
-        verify(userRepositoryMock).findUserById(1L);
+        assertThat(user).isEmpty();
+        verify(userRepository, times(1)).findUserById(userId);
     }
 
     @Test
-    void getUserByIdNotFound() {
-        // Arrange
-        UserRepository userRepositoryMock = mock(UserRepository.class);
+    @DisplayName("Should return the user when the user with the given id exists")
+    void getUserWhenUserExists() {
+        Long userId = 1L;
+        UserEntity userEntity =
+                UserEntity.builder()
+                        .id(userId)
+                        .email("john.doe@example.com")
+                        .password("password")
+                        .firstName("John")
+                        .lastName("Doe")
+                        .role(Role.CUSTOMER)
+                        .build();
+        User expectedUser =
+                User.builder()
+                        .id(userId)
+                        .email("john.doe@example.com")
+                        .password("password")
+                        .firstName("John")
+                        .lastName("Doe")
+                        .role(Role.CUSTOMER)
+                        .build();
+        when(userRepository.findUserById(userId)).thenReturn(Optional.of(userEntity));
 
-        when(userRepositoryMock.findUserById(2L)).thenReturn(Optional.empty());
+        Optional<User> actualUser = userManager.getUser(userId);
 
-        UserManagerImpl userManager = new UserManagerImpl(userRepositoryMock);
-
-        // Act
-        Optional<User> actualResult = userManager.getUser(2L);
-
-        // Assert
-        assertEquals(Optional.empty(), actualResult);
-        verify(userRepositoryMock).findUserById(2L);
+        assertTrue(actualUser.isPresent());
+        assertThat(actualUser.get()).isEqualTo(expectedUser);
+        verify(userRepository, times(1)).findUserById(userId);
     }
 }
