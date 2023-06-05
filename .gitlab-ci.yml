@@ -4,6 +4,7 @@ variables:
 stages:
   - build
   - test
+  - sonarqube
 
 build:
   stage: build
@@ -11,9 +12,10 @@ build:
     - ./gradlew assemble
 
 test:
-    stage: test
-    script:
-      - ./gradlew test
+  stage: test
+  script:
+    - ./gradlew test
+
 sonarqube:
   stage: sonarqube
   script:
