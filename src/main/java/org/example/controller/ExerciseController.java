@@ -7,6 +7,9 @@ import org.example.controller.dto.*;
 import org.example.controller.converters.ExerciseConverter;
 import org.example.domain.Exercise;
 import org.example.security.isauthenticated.IsAuthenticated;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,17 +42,21 @@ public class ExerciseController {
         }
     }
 
-
+    @IsAuthenticated
+    @RolesAllowed({"ROLE_CUSTOMER", "ROLE_ADMINISTRATION", "ROLE_TRAINER"})
     @GetMapping
-    public ResponseEntity<GetExercisesResponse> getExercises()
+    public ResponseEntity<GetExercisesResponse> getExercises(
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size)
     {
-        List<Exercise> exercises= exerciseManager.getExercises();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Exercise> exercises = exerciseManager.getExercises(name, pageable);
+
         if (exercises.isEmpty()){
             return ResponseEntity.noContent().build();
-        }
-        else{
-
-            GetExercisesResponse response = new GetExercisesResponse(exercises);
+        } else {
+            GetExercisesResponse response = new GetExercisesResponse(exercises.getContent(), exercises.getTotalPages());
             return ResponseEntity.ok(response);
         }
     }

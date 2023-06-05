@@ -1,4 +1,4 @@
-package org.example.controller.dto;
+package org.example.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterResponse {
-    private Long id;
+public class ExerciseIntensity {
+    private String exerciseName;
+    private Double averageWeight;
+
+
 }

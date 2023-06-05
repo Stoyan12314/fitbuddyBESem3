@@ -25,9 +25,9 @@ public class RequestManagerImpl implements RequestManager {
     }
 
     @Override
-    public List<Request> getUserExercises(long userId)
+    public List<Request> getUserExercises(long userId, long exerciseId)
     {
-        List<RequestEntity> requests = requestRepository.getUserExercises(userId);
+        List<RequestEntity> requests = requestRepository.getUserExercises(userId,exerciseId);
 
         if (requests.isEmpty()) {
             throw new EmptyListExercises();

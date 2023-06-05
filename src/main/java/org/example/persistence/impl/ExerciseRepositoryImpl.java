@@ -9,6 +9,8 @@ import org.example.domain.Exercise;
 import org.example.persistence.ExerciseRepo;
 import org.example.persistence.JPAExerciseRepository;
 import org.example.persistence.entity.ExerciseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,12 +22,15 @@ public class ExerciseRepositoryImpl implements ExerciseRepo {
 
     private final JPAExerciseRepository jpaExerciseRepository;
     @Override
-    public List<ExerciseEntity> findAll()
+    public Page<ExerciseEntity> findAll(Pageable pageable)
     {
-        return jpaExerciseRepository.findAll().stream().toList();
+        return jpaExerciseRepository.findAll(pageable);
 
     }
-
+    @Override
+    public Page<ExerciseEntity> findByName(String name,  Pageable pageable) {
+        return jpaExerciseRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
     @Override
     public ExerciseEntity findById(long exerciseId) {
 

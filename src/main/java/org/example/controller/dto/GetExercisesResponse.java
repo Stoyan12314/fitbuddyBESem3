@@ -13,4 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class GetExercisesResponse {
     private List<Exercise> exercises;
+    int totalPages;
+
 }

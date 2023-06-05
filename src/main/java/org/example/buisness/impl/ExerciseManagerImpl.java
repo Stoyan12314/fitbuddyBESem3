@@ -9,6 +9,8 @@ import org.example.controller.dto.UpdateExerciseRequest;
 import org.example.domain.Exercise;
 import org.example.persistence.ExerciseRepo;
 import org.example.persistence.entity.ExerciseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +33,12 @@ public class ExerciseManagerImpl implements ExerciseManager {
     }
 
     @Override
-    public List<Exercise> getExercises() {
-        return exerciseRepo.findAll().stream().map(ExerciseConverter::convertExercise).toList();
+    public Page<Exercise> getExercises(String name, Pageable pageable) {
+        if (name == null || name.trim().isEmpty()) {
+            return ExerciseConverter.convertList(exerciseRepo.findAll(pageable));
+        } else {
+            return ExerciseConverter.convertList(exerciseRepo.findByName(name, pageable));
+        }
     }
 
     @Override

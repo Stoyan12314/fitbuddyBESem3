@@ -17,10 +17,10 @@ import java.util.List;
 public class RequestController {
     private final RequestManager requestManager;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<GetRequestsResponse> getExercise(@PathVariable int userId)
+    @GetMapping("/{userId}/exercises/{exerciseId}")
+    public ResponseEntity<GetRequestsResponse> getExercise(@PathVariable int userId, @PathVariable int exerciseId)
     {
-        List<Request> request = requestManager.getUserExercises(userId);
+        List<Request> request = requestManager.getUserExercises(userId,exerciseId);
         if (request.isEmpty()){
             return ResponseEntity.noContent().build();
         }
