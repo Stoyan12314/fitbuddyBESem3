@@ -5,15 +5,15 @@ import java.time.LocalDate;
 import javax.persistence.*;
 
 @Getter
-<span class="nc" id="L8">@Setter</span>
-<span class="nc" id="L9">@Builder</span>
-<span class="nc" id="L10">@AllArgsConstructor</span>
+<span class="pc" id="L8">@Setter</span>
+<span class="pc" id="L9">@Builder</span>
+<span class="fc" id="L10">@AllArgsConstructor</span>
 <span class="fc" id="L11">@NoArgsConstructor</span>
 @Entity
 public class RequestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<span class="nc" id="L16">    private Long id;</span>
+<span class="fc" id="L16">    private Long id;</span>
 
     @Column(name = &quot;user_id&quot;)
 <span class="nc" id="L19">    private Long userId;</span>

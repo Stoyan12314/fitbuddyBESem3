@@ -1,0 +1,1 @@
+s (2javaX>hrFsrc/test/java/org/example/buisness/impl/StatisticsManagerImplTest.java

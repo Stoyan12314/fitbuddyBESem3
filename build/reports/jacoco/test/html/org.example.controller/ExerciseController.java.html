@@ -7,6 +7,9 @@ import org.example.controller.dto.*;
 import org.example.controller.converters.ExerciseConverter;
 import org.example.domain.Exercise;
 import org.example.security.isauthenticated.IsAuthenticated;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +23,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(&quot;http://localhost:3000&quot;)
 @RequestMapping(&quot;/exercises&quot;)
-<span class="fc" id="L23">@AllArgsConstructor</span>
+<span class="nc" id="L26">@AllArgsConstructor</span>
 public class ExerciseController {
     private final ExerciseManager exerciseManager;
     private final CloudinaryManagerImpl cloudinary;
@@ -28,75 +31,78 @@ public class ExerciseController {
     @GetMapping(&quot;/{exerciseId}&quot;)
     public ResponseEntity&lt;GetExerciseResponse&gt; getExercise(@PathVariable int exerciseId)
     {
-<span class="nc" id="L31">        Exercise exercise = exerciseManager.getExercise(exerciseId);</span>
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (exercise == null ){</span>
-<span class="nc" id="L33">            return ResponseEntity.noContent().build();</span>
+<span class="nc" id="L34">        Exercise exercise = exerciseManager.getExercise(exerciseId);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (exercise == null ){</span>
+<span class="nc" id="L36">            return ResponseEntity.noContent().build();</span>
         }
         else{
-<span class="nc" id="L36">            GetExerciseResponse response = new GetExerciseResponse(exercise);</span>
+<span class="nc" id="L39">            GetExerciseResponse response = new GetExerciseResponse(exercise);</span>
 
-<span class="nc" id="L38">            return ResponseEntity.ok(response);</span>
+<span class="nc" id="L41">            return ResponseEntity.ok(response);</span>
         }
     }
 
-
+    @IsAuthenticated
+    @RolesAllowed({&quot;ROLE_CUSTOMER&quot;, &quot;ROLE_ADMINISTRATION&quot;, &quot;ROLE_TRAINER&quot;})
     @GetMapping
-    public ResponseEntity&lt;GetExercisesResponse&gt; getExercises()
+    public ResponseEntity&lt;GetExercisesResponse&gt; getExercises(
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = &quot;0&quot;) int page,
+            @RequestParam(defaultValue = &quot;10&quot;) int size)
     {
-<span class="nc" id="L46">        List&lt;Exercise&gt; exercises= exerciseManager.getExercises();</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (exercises.isEmpty()){</span>
-<span class="nc" id="L48">            return ResponseEntity.noContent().build();</span>
-        }
-        else{
+<span class="nc" id="L53">        Pageable pageable = PageRequest.of(page, size);</span>
+<span class="nc" id="L54">        Page&lt;Exercise&gt; exercises = exerciseManager.getExercises(name, pageable);</span>
 
-<span class="nc" id="L52">            GetExercisesResponse response = new GetExercisesResponse(exercises);</span>
-<span class="nc" id="L53">            return ResponseEntity.ok(response);</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (exercises.isEmpty()){</span>
+<span class="nc" id="L57">            return ResponseEntity.noContent().build();</span>
+        } else {
+<span class="nc" id="L59">            GetExercisesResponse response = new GetExercisesResponse(exercises.getContent(), exercises.getTotalPages());</span>
+<span class="nc" id="L60">            return ResponseEntity.ok(response);</span>
         }
     }
-
+    @IsAuthenticated
+    @RolesAllowed(&quot;ROLE_ADMINISTRATION&quot;)
     @DeleteMapping(&quot;{exerciseId}&quot;)
     public ResponseEntity&lt;Void&gt; deleteExercise(@PathVariable int exerciseId)
     {
-<span class="nc" id="L60">        exerciseManager.deleteExerciseById(exerciseId);</span>
-<span class="nc" id="L61">        return ResponseEntity.noContent().build();</span>
+<span class="nc" id="L68">        exerciseManager.deleteExerciseById(exerciseId);</span>
+<span class="nc" id="L69">        return ResponseEntity.noContent().build();</span>
     }
     @IsAuthenticated
     @RolesAllowed(&quot;ROLE_ADMINISTRATION&quot;)
     @PostMapping(consumes = &quot;multipart/form-data&quot;)
     public ResponseEntity&lt;CreateExerciseResponse&gt; createExercise(@RequestPart(&quot;exercise&quot;) @Valid CreateExerciseRequest request, @RequestPart(&quot;file&quot;) MultipartFile file)
     {
-<span class="nc" id="L68">        String imageUrl = null;</span>
-<span class="nc" id="L69">        imageUrl = cloudinary.uploadImage(file);</span>
-<span class="nc" id="L70">        Exercise exerciseRequestConverted = ExerciseConverter.convert(request);</span>
-<span class="nc" id="L71">        exerciseRequestConverted.setImageUrl(imageUrl);</span>
-<span class="nc" id="L72">        CreateExerciseResponse createExerciseResponse = new CreateExerciseResponse();</span>
-<span class="nc" id="L73">        createExerciseResponse.setId(exerciseManager.createExercise(exerciseRequestConverted));</span>
-<span class="nc" id="L74">        return ResponseEntity.status(HttpStatus.CREATED).body(createExerciseResponse);</span>
+<span class="nc" id="L76">        String imageUrl = null;</span>
+<span class="nc" id="L77">        imageUrl = cloudinary.uploadImage(file);</span>
+<span class="nc" id="L78">        Exercise exerciseRequestConverted = ExerciseConverter.convert(request);</span>
+<span class="nc" id="L79">        exerciseRequestConverted.setImageUrl(imageUrl);</span>
+<span class="nc" id="L80">        CreateExerciseResponse createExerciseResponse = new CreateExerciseResponse();</span>
+<span class="nc" id="L81">        createExerciseResponse.setId(exerciseManager.createExercise(exerciseRequestConverted));</span>
+<span class="nc" id="L82">        return ResponseEntity.status(HttpStatus.CREATED).body(createExerciseResponse);</span>
     }
 
-    @PutMapping(&quot;{id}&quot;)
-    public ResponseEntity&lt;Void&gt; updateExercise(@PathVariable(&quot;id&quot;) final Long id,
-                                               @RequestBody @Valid UpdateExerciseRequest request) {
-<span class="nc" id="L80">        request.setId(id);</span>
-<span class="nc" id="L81">        Exercise exercise = ExerciseConverter.convert(request);</span>
-<span class="nc" id="L82">        exerciseManager.updateExercise(exercise);</span>
-<span class="nc" id="L83">        return ResponseEntity.noContent().build();</span>
+@IsAuthenticated
+@RolesAllowed(&quot;ROLE_ADMINISTRATION&quot;)
+@PutMapping(&quot;/{exerciseId}&quot;)
+public ResponseEntity&lt;UpdateExerciseResponse&gt; updateExercise(@PathVariable int exerciseId, @RequestPart(&quot;exercise&quot;) @Valid UpdateExerciseRequest request, @RequestPart(value = &quot;file&quot;, required = false) MultipartFile file)
+{
+<span class="nc" id="L90">    String imageUrl = null;</span>
+<span class="nc" id="L91">    Exercise ex =  exerciseManager.getExercise(exerciseId);</span>
+<span class="nc bnc" id="L92" title="All 4 branches missed.">    if (file != null &amp;&amp; !file.isEmpty()) {</span>
+<span class="nc" id="L93">        imageUrl = cloudinary.uploadImage(file);</span>
+    } else {
+<span class="nc" id="L95">        imageUrl = ex.getImageUrl();</span>
     }
+<span class="nc" id="L97">    UpdateExerciseRequest test = new UpdateExerciseRequest();</span>
+<span class="nc" id="L98">    test.setId(Long.valueOf(exerciseId));</span>
+<span class="nc" id="L99">    test.setName(request.getName());</span>
+<span class="nc" id="L100">    test.setDescription(request.getDescription());</span>
+<span class="nc" id="L101">    test.setImageUrl(imageUrl);</span>
+<span class="nc" id="L102">    exerciseManager.updateExercise(test);</span>
+<span class="nc" id="L103">    return ResponseEntity.status(HttpStatus.OK).body(new UpdateExerciseResponse(Long.valueOf(exerciseId)));</span>
 
-
-    @IsAuthenticated
-    @RolesAllowed(&quot;ROLE_ADMINISTRATION&quot;)
-    @PutMapping(value = &quot;/{id}&quot;, consumes = &quot;multipart/form-data&quot;)
-    public ResponseEntity&lt;UpdateExerciseResponse&gt; updateExercise(@PathVariable Long id, @RequestPart(&quot;exercise&quot;) @Valid UpdateExerciseRequest request, @RequestPart(&quot;file&quot;) MultipartFile file) {
-<span class="nc" id="L91">        String imageUrl = null;</span>
-<span class="nc" id="L92">        imageUrl = cloudinary.uploadImage(file);</span>
-<span class="nc" id="L93">        Exercise exerciseToBeUpdated = exerciseManager.getExercise(id);</span>
-<span class="nc" id="L94">        exerciseToBeUpdated.setName(request.getName());</span>
-<span class="nc" id="L95">        exerciseToBeUpdated.setDescription(request.getDescription());</span>
-<span class="nc" id="L96">        exerciseToBeUpdated.setImageUrl(imageUrl);</span>
-<span class="nc" id="L97">        exerciseManager.updateExercise(exerciseToBeUpdated);</span>
-<span class="nc" id="L98">        return ResponseEntity.status(HttpStatus.OK).body(new UpdateExerciseResponse(exerciseToBeUpdated.getId()));</span>
-    }
+}
 
 
 

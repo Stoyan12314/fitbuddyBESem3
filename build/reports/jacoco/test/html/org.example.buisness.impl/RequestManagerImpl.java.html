@@ -3,50 +3,72 @@
 import lombok.AllArgsConstructor;
 import org.example.buisness.exceptions.EmptyListExercises;
 import org.example.buisness.RequestManager;
+import org.example.buisness.exceptions.InvalidRequestException;
 import org.example.controller.dto.CreateRequestRequest;
 import org.example.controller.dto.RequestResponse;
 import org.example.controller.converters.RequestConverter;
+import org.example.domain.AccessToken;
 import org.example.domain.Request;
 import org.example.persistence.RequestRepository;
 import org.example.persistence.entity.RequestEntity;
+import org.example.security.auth.RequestAuthenticatedUserProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-<span class="fc" id="L17">@AllArgsConstructor</span>
+<span class="fc" id="L21">@AllArgsConstructor</span>
 public class RequestManagerImpl implements RequestManager {
     private final RequestRepository requestRepository;
+    private final RequestAuthenticatedUserProvider requestAuthenticatedUserProvider;
+
 
     @Override
     public Long createRequest(long userId, long exerciseId)
     {
-<span class="nc" id="L24">        return null;</span>
+<span class="nc" id="L30">        return null;</span>
     }
 
     @Override
-    public List&lt;Request&gt; getUserExercises(long userId)
+    public List&lt;Request&gt; getUserExercises(long userId, long exerciseId)
     {
-<span class="nc" id="L30">        List&lt;RequestEntity&gt; requests = requestRepository.getUserExercises(userId);</span>
 
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (requests.isEmpty()) {</span>
-<span class="nc" id="L33">            throw new EmptyListExercises();</span>
+<span class="nc" id="L37">        AccessToken accessToken = requestAuthenticatedUserProvider.getAuthenticatedUserInRequest();</span>
+<span class="nc bnc" id="L38" title="All 4 branches missed.">        if (accessToken == null || accessToken.getUserId() != userId) {</span>
+<span class="nc" id="L39">            throw new InvalidRequestException();</span>
         }
 
-<span class="nc" id="L36">        return RequestConverter.convert(requests);</span>
+<span class="nc" id="L42">            List&lt;RequestEntity&gt; requests = requestRepository.getUserExercises(userId,exerciseId);</span>
+
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            if (requests.isEmpty()) {</span>
+<span class="nc" id="L45">                throw new EmptyListExercises();</span>
+            }
+
+<span class="nc" id="L48">            return RequestConverter.convert(requests);</span>
+
+
+
     }
     @Override
     public void deleteExercise(long exerciseId)
     {
-<span class="nc" id="L41">        requestRepository.deleteExercise(exerciseId);</span>
-<span class="nc" id="L42">    }</span>
+<span class="nc" id="L56">        requestRepository.deleteExercise(exerciseId);</span>
+<span class="nc" id="L57">    }</span>
 
     @Override
     public RequestResponse assignExercise(CreateRequestRequest requestEntity) {
-<span class="nc" id="L46">        RequestEntity response = requestRepository.assignExercise(RequestConverter.convertToRequestRequest(requestEntity));</span>
-<span class="nc" id="L47">        return RequestResponse.builder()</span>
-<span class="nc" id="L48">                .id(response.getId())</span>
-<span class="nc" id="L49">                .build();</span>
+
+
+<span class="fc" id="L63">        AccessToken accessToken = requestAuthenticatedUserProvider.getAuthenticatedUserInRequest();</span>
+<span class="pc bpc" id="L64" title="1 of 4 branches missed.">        if (accessToken == null || accessToken.getUserId() != requestEntity.getUserId()) {</span>
+<span class="fc" id="L65">            throw new InvalidRequestException();</span>
+        }
+<span class="fc" id="L67">            RequestEntity response = requestRepository.assignExercise(RequestConverter.convertToRequestRequest(requestEntity));</span>
+<span class="fc" id="L68">            return RequestResponse.builder()</span>
+<span class="fc" id="L69">                    .id(response.getId())</span>
+<span class="fc" id="L70">                    .build();</span>
+
     }
 
 

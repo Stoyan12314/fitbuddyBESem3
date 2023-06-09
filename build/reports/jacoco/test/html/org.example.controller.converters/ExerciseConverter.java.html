@@ -4,49 +4,61 @@ import org.example.controller.dto.CreateExerciseRequest;
 import org.example.controller.dto.UpdateExerciseRequest;
 import org.example.domain.Exercise;
 import org.example.persistence.entity.ExerciseEntity;
+import org.springframework.data.domain.Page;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExerciseConverter {
     private ExerciseConverter() {
     }
 
-
-    public static Exercise convert(UpdateExerciseRequest exercise) {
-<span class="nc" id="L14">        return Exercise.builder()</span>
-<span class="nc" id="L15">                .id(exercise.getId())</span>
-<span class="nc" id="L16">                .name(exercise.getName())</span>
-<span class="nc" id="L17">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
-<span class="nc" id="L18">                .description(exercise.getDescription())</span>
-<span class="nc" id="L19">                .build();</span>
+    public static Page&lt;Exercise&gt; convertList(Page&lt;ExerciseEntity&gt; exercises) {
+<span class="nc" id="L17">        return exercises.map(exercise -&gt; Exercise.builder()</span>
+<span class="nc" id="L18">                .id(exercise.getId())</span>
+<span class="nc" id="L19">                .name(exercise.getName())</span>
+<span class="nc" id="L20">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
+<span class="nc" id="L21">                .description(exercise.getDescription())</span>
+<span class="nc" id="L22">                .build()</span>
+        );
+    }
+    public static ExerciseEntity convertUpdate(UpdateExerciseRequest exercise) {
+<span class="nc" id="L26">        return ExerciseEntity.builder()</span>
+<span class="nc" id="L27">                .id(exercise.getId())</span>
+<span class="nc" id="L28">                .name(exercise.getName())</span>
+<span class="nc" id="L29">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
+<span class="nc" id="L30">                .description(exercise.getDescription())</span>
+<span class="nc" id="L31">                .build();</span>
     }
     public static Exercise convert(CreateExerciseRequest exercise) {
-<span class="nc" id="L22">        return Exercise.builder()</span>
+<span class="nc" id="L34">        return Exercise.builder()</span>
 
-<span class="nc" id="L24">                .name(exercise.getName())</span>
+<span class="nc" id="L36">                .name(exercise.getName())</span>
                // .imageUrl(exercise.getImageUrl()) // Add imageUrl
 
-<span class="nc" id="L27">                .description(exercise.getDescription())</span>
-<span class="nc" id="L28">                .build();</span>
+<span class="nc" id="L39">                .description(exercise.getDescription())</span>
+<span class="nc" id="L40">                .build();</span>
     }
 
 
     public static Exercise convertExercise(ExerciseEntity exercise) {
-<span class="fc" id="L33">        return Exercise.builder()</span>
-<span class="fc" id="L34">                .id(exercise.getId())</span>
-<span class="fc" id="L35">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
+<span class="fc" id="L45">        return Exercise.builder()</span>
+<span class="fc" id="L46">                .id(exercise.getId())</span>
+<span class="fc" id="L47">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
 
-<span class="fc" id="L37">                .name(exercise.getName())</span>
-<span class="fc" id="L38">                .description(exercise.getDescription())</span>
-<span class="fc" id="L39">                .build();</span>
+<span class="fc" id="L49">                .name(exercise.getName())</span>
+<span class="fc" id="L50">                .description(exercise.getDescription())</span>
+<span class="fc" id="L51">                .build();</span>
     }
 
     public static ExerciseEntity convertToEntity(Exercise exercise) {
-<span class="nc" id="L43">        return ExerciseEntity.builder()</span>
-<span class="nc" id="L44">                .id(exercise.getId())</span>
-<span class="nc" id="L45">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
+<span class="nc" id="L55">        return ExerciseEntity.builder()</span>
+<span class="nc" id="L56">                .id(exercise.getId())</span>
+<span class="nc" id="L57">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>
 
-<span class="nc" id="L47">                .name(exercise.getName())</span>
-<span class="nc" id="L48">                .description(exercise.getDescription())</span>
-<span class="nc" id="L49">                .build();</span>
+<span class="nc" id="L59">                .name(exercise.getName())</span>
+<span class="nc" id="L60">                .description(exercise.getDescription())</span>
+<span class="nc" id="L61">                .build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,1 @@
+O 2javaXhr@src/main/java/org/example/persistence/entity/ExerciseEntity.java

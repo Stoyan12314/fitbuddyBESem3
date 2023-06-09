@@ -11,16 +11,21 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = &quot;http://localhost:3000&quot;)
-<span class="fc" id="L14">@AllArgsConstructor</span>
+@RequestMapping(&quot;/login&quot;)
+<span class="fc" id="L15">@AllArgsConstructor</span>
 public class LoginController {
 
     private final LoginManager loginManager;
 
-    @PostMapping(&quot;/login&quot;)
+    @PostMapping
     public ResponseEntity&lt;LoginResponse&gt; login(@RequestBody @Valid LoginRequest loginRequest) {
-<span class="fc" id="L21">        LoginResponse loginResponse = loginManager.login(loginRequest);</span>
-<span class="fc" id="L22">        return ResponseEntity.ok(loginResponse);</span>
+<span class="fc" id="L22">        LoginResponse loginResponse = loginManager.login(loginRequest);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        if (loginResponse == null) {</span>
+<span class="fc" id="L24">            return ResponseEntity.badRequest().build();</span>
+        }
+<span class="fc" id="L26">        return ResponseEntity.ok(loginResponse);</span>
     }
-
 }
+
+
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

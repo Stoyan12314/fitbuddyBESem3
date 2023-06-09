@@ -1,0 +1,1 @@
+q (2javaXohrDsrc/test/java/org/example/buisness/impl/RegisterManagerImplTest.java

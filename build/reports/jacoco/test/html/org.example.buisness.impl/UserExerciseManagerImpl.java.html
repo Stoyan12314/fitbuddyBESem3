@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserExerciseManagerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">individualAssignment</a> &gt; <a href="index.source.html" class="el_package">org.example.buisness.impl</a> &gt; <span class="el_source">UserExerciseManagerImpl.java</span></div><h1>UserExerciseManagerImpl.java</h1><pre class="source lang-java linenums">package org.example.buisness.impl;
+
+import lombok.AllArgsConstructor;
+import org.example.buisness.UserExerciseManager;
+import org.example.buisness.exceptions.ExerciseNotFoundException;
+import org.example.buisness.exceptions.UserNotFoundException;
+import org.example.controller.converters.UserExerciseConverter;
+import org.example.domain.UserExercise;
+import org.example.persistence.ExerciseRepo;
+import org.example.persistence.UserExerciseRepo;
+import org.example.persistence.UserRepository;
+import org.example.persistence.entity.ExerciseEntity;
+import org.example.persistence.entity.UserEntity;
+import org.example.persistence.entity.UserExerciseEntity;
+import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.util.List;
+
+@Service
+<span class="fc" id="L20">@AllArgsConstructor</span>
+public class UserExerciseManagerImpl implements UserExerciseManager {
+
+    private UserExerciseRepo userExerciseRepo;
+    private UserRepository userRepo;
+    private ExerciseRepo exerciseRepo;
+
+    @Override
+    public List&lt;UserExercise&gt; getUserExercises(long userId, LocalDate date) {
+<span class="fc" id="L29">        return UserExerciseConverter.convertList((userExerciseRepo.getUserExercises(userId, date)));</span>
+    }
+    @Override
+    public void unassignExerciseFromUser(long exerciseId) {
+<span class="fc" id="L33">        UserExerciseEntity userExerciseEntity = userExerciseRepo.findExerciseById(exerciseId)</span>
+<span class="fc" id="L34">                .orElseThrow(() -&gt; new ExerciseNotFoundException(&quot;Exercise not found with id: &quot; + exerciseId));</span>
+
+<span class="fc" id="L36">        userExerciseRepo.delete(userExerciseEntity);</span>
+<span class="fc" id="L37">    }</span>
+    @Override
+    public void assignExerciseToUser(long userId, long exerciseId, LocalDate date) {
+
+
+<span class="fc" id="L42">            UserEntity userEntity = userRepo.findUserById(userId)</span>
+<span class="fc" id="L43">                    .orElseThrow(() -&gt; new UserNotFoundException(&quot;User not found with id: &quot; + userId));</span>
+
+<span class="fc" id="L45">            ExerciseEntity exerciseEntity = exerciseRepo.findById(exerciseId);</span>
+
+
+<span class="fc" id="L48">            UserExerciseEntity userExerciseEntity = new UserExerciseEntity();</span>
+<span class="fc" id="L49">            userExerciseEntity.setUser(userEntity);</span>
+<span class="fc" id="L50">            userExerciseEntity.setExercise(exerciseEntity);</span>
+<span class="fc" id="L51">            userExerciseEntity.setDate(date);</span>
+
+<span class="fc" id="L53">            userExerciseRepo.save(userExerciseEntity);</span>
+
+
+
+
+<span class="fc" id="L58">    }</span>
+
+    @Override
+    public List&lt;UserExercise&gt; getAllUserExercises(long userId) {
+<span class="fc" id="L62">        return UserExerciseConverter.convertList((userExerciseRepo.getAllUserExercises(userId)));</span>
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

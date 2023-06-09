@@ -2,5 +2,5 @@ projectKey=fontys.sem3:individualAssignment
 serverUrl=http://localhost:9000
 serverVersion=9.9.0.65466
 dashboardUrl=http://localhost:9000/dashboard?id=fontys.sem3%3AindividualAssignment
-ceTaskId=AYhI7rumchsxYfJbeB49
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYhI7rumchsxYfJbeB49
+ceTaskId=AYihGs711pFIpK6t-Yar
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYihGs711pFIpK6t-Yar

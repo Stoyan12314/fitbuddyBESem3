@@ -1,0 +1,1 @@
+7 2javaXhr>src/main/java/org/example/controller/dto/RegisterResponse.java

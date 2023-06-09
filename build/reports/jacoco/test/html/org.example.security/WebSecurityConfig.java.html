@@ -15,15 +15,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @EnableWebSecurity
 @Configuration
-<span class="fc" id="L18">@RequiredArgsConstructor</span>
+<span class="nc" id="L18">@RequiredArgsConstructor</span>
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+<span class="nc" id="L23">        httpSecurity.cors().and().csrf().disable();</span>
 
+<span class="nc" id="L25">        httpSecurity.authorizeRequests().anyRequest().permitAll();</span>
 
-<span class="fc" id="L25">        httpSecurity.authorizeRequests().anyRequest().permitAll();</span>
-<span class="fc" id="L26">        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);</span>
-<span class="fc" id="L27">    }</span>
+<span class="nc" id="L27">        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);</span>
+<span class="nc" id="L28">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.buisness.impl.AccessTokenEncoderDecoderImplTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-06-09T16:58:34" hostname="DESKTOP-MSEMH7G" time="1.635">
+  <properties/>
+  <testcase name="Should throw InvalidAccessTokenException when token is invalid" classname="org.example.buisness.impl.AccessTokenEncoderDecoderImplTest" time="1.439"/>
+  <testcase name="Should decode AccessToken correctly" classname="org.example.buisness.impl.AccessTokenEncoderDecoderImplTest" time="0.19"/>
+  <testcase name="Should encode AccessToken correctly" classname="org.example.buisness.impl.AccessTokenEncoderDecoderImplTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

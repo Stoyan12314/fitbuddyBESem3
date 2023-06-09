@@ -4,35 +4,40 @@ package org.example.persistence.impl;
 
 import lombok.AllArgsConstructor;
 import org.example.controller.converters.ExerciseConverter;
+import org.example.controller.dto.UpdateExerciseRequest;
 import org.example.domain.Exercise;
 import org.example.persistence.ExerciseRepo;
 import org.example.persistence.JPAExerciseRepository;
 import org.example.persistence.entity.ExerciseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 @Repository
-<span class="fc" id="L16">@AllArgsConstructor</span>
+<span class="nc" id="L18">@AllArgsConstructor</span>
 public class ExerciseRepositoryImpl implements ExerciseRepo {
 
 
     private final JPAExerciseRepository jpaExerciseRepository;
     @Override
-    public List&lt;ExerciseEntity&gt; findAll()
+    public Page&lt;ExerciseEntity&gt; findAll(Pageable pageable)
     {
-<span class="nc" id="L24">        return jpaExerciseRepository.findAll().stream().toList();</span>
+<span class="nc" id="L26">        return jpaExerciseRepository.findAll(pageable);</span>
 
     }
-
+    @Override
+    public Page&lt;ExerciseEntity&gt; findByName(String name,  Pageable pageable) {
+<span class="nc" id="L31">        return jpaExerciseRepository.findByNameContainingIgnoreCase(name, pageable);</span>
+    }
     @Override
     public ExerciseEntity findById(long exerciseId) {
 
-<span class="nc" id="L31">        Optional&lt;ExerciseEntity&gt; exercise = jpaExerciseRepository.findById(exerciseId);</span>
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        if (exercise.isPresent()) {</span>
-<span class="nc" id="L33">            return exercise.get();</span>
+<span class="nc" id="L36">        Optional&lt;ExerciseEntity&gt; exercise = jpaExerciseRepository.findById(exerciseId);</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (exercise.isPresent()) {</span>
+<span class="nc" id="L38">            return exercise.get();</span>
         } else {
-<span class="nc" id="L35">            return null;</span>
+<span class="nc" id="L40">            return null;</span>
         }
     }
 
@@ -42,24 +47,24 @@ public class ExerciseRepositoryImpl implements ExerciseRepo {
 
 
 
-<span class="nc" id="L45">        ExerciseEntity exerciseEntity = ExerciseConverter.convertToEntity(request);</span>
+<span class="nc" id="L50">        ExerciseEntity exerciseEntity = ExerciseConverter.convertToEntity(request);</span>
 
-<span class="nc" id="L47">        return jpaExerciseRepository.save(exerciseEntity).getId();</span>
+<span class="nc" id="L52">        return jpaExerciseRepository.save(exerciseEntity).getId();</span>
 
     }
 
     @Override
-    public void updateExercise(Exercise exercise) {
-<span class="nc" id="L53">        ExerciseEntity exerciseEntity = ExerciseConverter.convertToEntity(exercise);</span>
-<span class="nc" id="L54">        jpaExerciseRepository.save(exerciseEntity);</span>
+    public void updateExercise(UpdateExerciseRequest exercise) {
+<span class="nc" id="L58">        ExerciseEntity exerciseEntity = ExerciseConverter.convertUpdate(exercise);</span>
+<span class="nc" id="L59">        jpaExerciseRepository.save(exerciseEntity);</span>
 
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L61">    }</span>
 
     @Override
     public void deleteExercise(long exerciseId) {
-<span class="nc" id="L60">        jpaExerciseRepository.deleteById(exerciseId);</span>
+<span class="nc" id="L65">        jpaExerciseRepository.deleteById(exerciseId);</span>
 
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L67">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

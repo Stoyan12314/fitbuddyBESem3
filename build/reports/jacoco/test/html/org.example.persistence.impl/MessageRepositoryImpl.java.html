@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MessageRepositoryImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">individualAssignment</a> &gt; <a href="index.source.html" class="el_package">org.example.persistence.impl</a> &gt; <span class="el_source">MessageRepositoryImpl.java</span></div><h1>MessageRepositoryImpl.java</h1><pre class="source lang-java linenums">package org.example.persistence.impl;
+
+import lombok.AllArgsConstructor;
+import org.example.persistence.JPAMessageRepository;
+import org.example.persistence.MessageRepo;
+import org.example.persistence.entity.MessageEntity;
+import org.example.persistence.entity.UserEntity;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+<span class="nc" id="L14">@AllArgsConstructor</span>
+public class MessageRepositoryImpl implements MessageRepo {
+    private final JPAMessageRepository jpaRepo;
+    @Override
+    public List&lt;MessageEntity&gt; findConversation(Long senderId, Long receiverId) {
+<span class="nc" id="L19">        return jpaRepo.findConversation(senderId, receiverId);</span>
+    }
+    @Override
+    public Optional&lt;Long&gt; findTrainerOfUser(Long userId)
+    {
+<span class="nc" id="L24">        return jpaRepo.findTrainerOfUser(userId);</span>
+    }
+
+    @Override
+    public MessageEntity saveMessage(MessageEntity message) {
+<span class="nc" id="L29">        return jpaRepo.save(message);</span>
+    }
+
+    @Override
+    public List&lt;MessageEntity&gt; getChatHistory(Long userId, Long trainerId) {
+<span class="nc" id="L34">        return jpaRepo.findConversation(userId, trainerId);</span>
+    }
+
+    @Override
+    public List&lt;MessageEntity&gt; findAllConversations(Long trainerId) {
+<span class="nc" id="L39">        return jpaRepo.findAllConversations(trainerId);</span>
+    }
+
+    @Override
+    public List&lt;UserEntity&gt; findClientsOfTrainer(Long trainerId) {
+<span class="nc" id="L44">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

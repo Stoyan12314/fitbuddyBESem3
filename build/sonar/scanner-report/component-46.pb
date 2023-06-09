@@ -1,0 +1,1 @@
+. 2javaXhrBsrc/main/java/org/example/controller/dto/GetExercisesResponse.java

@@ -27,13 +27,13 @@ public class RequestConverter {
     {
 
 
-<span class="nc" id="L30">        return RequestEntity.builder()</span>
-<span class="nc" id="L31">                .date(createRequestRequest.getDate())</span>
-<span class="nc" id="L32">                .userId(createRequestRequest.getUserId())</span>
-<span class="nc" id="L33">                .exerciseId(createRequestRequest.getExerciseId())</span>
-<span class="nc" id="L34">                .reps(createRequestRequest.getReps())</span>
-<span class="nc" id="L35">                .weight(createRequestRequest.getWeight())</span>
-<span class="nc" id="L36">                .build();</span>
+<span class="fc" id="L30">        return RequestEntity.builder()</span>
+<span class="fc" id="L31">                .date(createRequestRequest.getDate())</span>
+<span class="fc" id="L32">                .userId(createRequestRequest.getUserId())</span>
+<span class="fc" id="L33">                .exerciseId(createRequestRequest.getExerciseId())</span>
+<span class="fc" id="L34">                .reps(createRequestRequest.getReps())</span>
+<span class="fc" id="L35">                .weight(createRequestRequest.getWeight())</span>
+<span class="fc" id="L36">                .build();</span>
     }
 
     public static List&lt;Request&gt; convert(List&lt;RequestEntity&gt; requestEntities) {

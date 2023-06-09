@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.buisness.AccessTokenEncoder;
 import org.example.buisness.exceptions.InvalidCredentialsException;
 import org.example.buisness.LoginManager;
+import org.example.buisness.exceptions.InvalidLoginRequestException;
 import org.example.controller.dto.LoginRequest;
 import org.example.controller.dto.LoginResponse;
 import org.example.controller.converters.UserConverter;
@@ -20,7 +21,7 @@ import java.util.List;
 
 
 @Service
-<span class="fc" id="L23">@AllArgsConstructor</span>
+<span class="fc" id="L24">@AllArgsConstructor</span>
 public class LoginManagerImpl implements LoginManager {
 
     private final UserRepository userRepository;
@@ -30,39 +31,44 @@ public class LoginManagerImpl implements LoginManager {
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
 
-<span class="nc" id="L33">        UserEntity user = userRepository.findUserByEmail(loginRequest.getEmail());</span>
-<span class="nc bnc" id="L34" title="All 2 branches missed.">        if(user == null)</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if(loginRequest == null)</span>
         {
-<span class="nc" id="L36">            throw new InvalidCredentialsException();</span>
+<span class="fc" id="L36">            throw new InvalidLoginRequestException();</span>
         }
 
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        if(!matchesPassword(loginRequest.getPassword(), user.getPassword()))</span>
+<span class="fc" id="L39">        UserEntity user = userRepository.findUserByEmail(loginRequest.getEmail());</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if(user == null)</span>
         {
-<span class="nc" id="L41">            throw new InvalidCredentialsException();</span>
+<span class="fc" id="L42">            throw new InvalidCredentialsException();</span>
         }
-<span class="nc" id="L43">        String accessToken = generateAccessToken(UserConverter.convert(user));</span>
-<span class="nc" id="L44">        List&lt;String&gt; roles = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L45">        roles.add(user.getRole().toString());</span>
-<span class="nc" id="L46">        return LoginResponse.builder().accessToken(accessToken)</span>
-<span class="nc" id="L47">                .roles(roles)</span>
-<span class="nc" id="L48">                .userId(user.getId())</span>
-<span class="nc" id="L49">                .build();</span>
+
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if(!matchesPassword(loginRequest.getPassword(), user.getPassword()))</span>
+        {
+<span class="fc" id="L47">            throw new InvalidCredentialsException();</span>
+        }
+<span class="fc" id="L49">        String accessToken = generateAccessToken(UserConverter.convert(user));</span>
+<span class="fc" id="L50">        List&lt;String&gt; roles = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L51">        roles.add(user.getRole().toString());</span>
+<span class="fc" id="L52">        return LoginResponse.builder().accessToken(accessToken)</span>
+<span class="fc" id="L53">                .roles(roles)</span>
+<span class="fc" id="L54">                .userId(user.getId())</span>
+<span class="fc" id="L55">                .build();</span>
     }
     private String generateAccessToken(User user) {
 
-<span class="nc" id="L53">        List&lt;String&gt; roles = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L54">        roles.add(user.getRole().toString());</span>
-<span class="nc" id="L55">        return accessTokenEncoder.encode(</span>
-<span class="nc" id="L56">                AccessToken.builder()</span>
-<span class="nc" id="L57">                        .subject(user.getEmail())</span>
-<span class="nc" id="L58">                        .roles(roles)</span>
-<span class="nc" id="L59">                        .userId(user.getId())</span>
+<span class="fc" id="L59">        List&lt;String&gt; roles = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L60">        roles.add(user.getRole().toString());</span>
+<span class="fc" id="L61">        return accessTokenEncoder.encode(</span>
+<span class="fc" id="L62">                AccessToken.builder()</span>
+<span class="fc" id="L63">                        .subject(user.getEmail())</span>
+<span class="fc" id="L64">                        .roles(roles)</span>
+<span class="fc" id="L65">                        .userId(user.getId())</span>
 
-<span class="nc" id="L61">                        .build());</span>
+<span class="fc" id="L67">                        .build());</span>
     }
 
     private boolean matchesPassword(String rawPassword, String encodedPassword) {
-<span class="nc" id="L65">        return passwordEncoder.matches(rawPassword, encodedPassword);</span>
+<span class="fc" id="L71">        return passwordEncoder.matches(rawPassword, encodedPassword);</span>
     }
 
 

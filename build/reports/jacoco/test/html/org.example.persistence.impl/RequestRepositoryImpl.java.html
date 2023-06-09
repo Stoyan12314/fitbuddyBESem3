@@ -10,29 +10,32 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-<span class="fc" id="L13">@AllArgsConstructor</span>
+<span class="nc" id="L13">@AllArgsConstructor</span>
 public class RequestRepositoryImpl implements RequestRepository {
     private final JPARequestRepository jpaRepo;
+
+
+    @Override
     public RequestEntity assignExercise(RequestEntity requestEntity) {
-<span class="nc" id="L17">        return jpaRepo.save(requestEntity);</span>
+<span class="nc" id="L20">        return jpaRepo.save(requestEntity);</span>
     }
 
     @Override
     public Long createRequest(long userId, long exerciseId) {
-<span class="nc" id="L22">        return null;</span>
+<span class="nc" id="L25">        return null;</span>
     }
 
     @Override
-    public List&lt;RequestEntity&gt; getUserExercises(long userId) {
+    public List&lt;RequestEntity&gt; getUserExercises(long userId, long exerciseId) {
 
-<span class="nc" id="L28">        return jpaRepo.getUserExercises(userId);</span>
+<span class="nc" id="L31">        return jpaRepo.getUserExercises(userId, exerciseId);</span>
     }
 
     @Override
     @Transactional
     public void deleteExercise(long exerciseId) {
-<span class="nc" id="L34">        jpaRepo.deleteById(exerciseId);</span>
-<span class="nc" id="L35">    }</span>
+<span class="nc" id="L37">        jpaRepo.deleteById(exerciseId);</span>
+<span class="nc" id="L38">    }</span>
 
 
 }

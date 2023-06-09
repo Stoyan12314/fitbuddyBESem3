@@ -1,0 +1,1 @@
+ 2javaXhrLsrc/main/java/org/example/buisness/exceptions/NotFoundExerciseException.java

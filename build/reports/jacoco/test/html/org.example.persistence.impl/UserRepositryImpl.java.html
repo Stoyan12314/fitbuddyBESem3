@@ -6,38 +6,49 @@ import lombok.AllArgsConstructor;
 import org.example.persistence.JPAUserRepository;
 import org.example.persistence.UserRepository;
 import org.example.persistence.entity.UserEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Pageable;
 
-
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-<span class="fc" id="L15">@AllArgsConstructor</span>
+<span class="nc" id="L17">@AllArgsConstructor</span>
 public class UserRepositryImpl implements UserRepository {
     private final JPAUserRepository jpaRepo;
 
 
     @Override
+    public Page&lt;UserEntity&gt; getAllUsers(Pageable pageable) {
+<span class="nc" id="L24">        return jpaRepo.getAllUsers(pageable);</span>
+    }
+
+    @Override
+    public Page&lt;UserEntity&gt; getUsersByEmail(String email, Pageable pageable) {
+<span class="nc" id="L29">        return jpaRepo.findByEmailContainingIgnoreCase(email, pageable);</span>
+    }
+
+    @Override
     public UserEntity findUserByEmail(String email) {
-<span class="nc" id="L22">        UserEntity user = jpaRepo.findFirstByEmail(email);</span>
-<span class="nc bnc" id="L23" title="All 2 branches missed.">        if(user != null) {</span>
-<span class="nc" id="L24">            return user;</span>
+<span class="nc" id="L34">        UserEntity user = jpaRepo.findFirstByEmail(email);</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if(user != null) {</span>
+<span class="nc" id="L36">            return user;</span>
         }
-<span class="nc" id="L26">        return null;</span>
+<span class="nc" id="L38">        return null;</span>
 
     }
 
     @Override
     public Optional&lt;UserEntity&gt; findUserById(Long id) {
-<span class="nc" id="L32">        Optional&lt;UserEntity&gt; entity = jpaRepo.findById(id);</span>
-<span class="nc" id="L33">        return entity;</span>
+<span class="nc" id="L44">                return jpaRepo.findById(id);</span>
     }
 
     @Override
     public UserEntity saveUser(UserEntity user) {
 
-<span class="nc" id="L39">        jpaRepo.save(user);</span>
-<span class="nc" id="L40">        return user;</span>
+<span class="nc" id="L50">        jpaRepo.save(user);</span>
+<span class="nc" id="L51">        return user;</span>
     }
 }
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.buisness.impl.RegisterManagerImplTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-06-09T16:58:37" hostname="DESKTOP-MSEMH7G" time="0.034">
+  <properties/>
+  <testcase name="Should throw an EmailExistException when the email is already taken" classname="org.example.buisness.impl.RegisterManagerImplTest" time="0.006"/>
+  <testcase name="Should create a new user when the email is not taken" classname="org.example.buisness.impl.RegisterManagerImplTest" time="0.024"/>
+  <testcase name="Should throw an InvalidCredentialsException when the email is invalid" classname="org.example.buisness.impl.RegisterManagerImplTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
