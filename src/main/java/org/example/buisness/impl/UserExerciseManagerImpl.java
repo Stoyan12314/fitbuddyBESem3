@@ -37,29 +37,18 @@ public class UserExerciseManagerImpl implements UserExerciseManager {
     }
     @Override
     public void assignExerciseToUser(long userId, long exerciseId, LocalDate date) {
-
-
             UserEntity userEntity = userRepo.findUserById(userId)
                     .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
-
             ExerciseEntity exerciseEntity = exerciseRepo.findById(exerciseId);
-
-
             UserExerciseEntity userExerciseEntity = new UserExerciseEntity();
             userExerciseEntity.setUser(userEntity);
             userExerciseEntity.setExercise(exerciseEntity);
             userExerciseEntity.setDate(date);
-
             userExerciseRepo.save(userExerciseEntity);
-
-
-
-
     }
 
     @Override
     public List<UserExercise> getAllUserExercises(long userId) {
         return UserExerciseConverter.convertList((userExerciseRepo.getAllUserExercises(userId)));
-
     }
 }

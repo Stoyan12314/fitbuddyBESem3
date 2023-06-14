@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.controller.LoginControllerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-06-09T16:58:37" hostname="DESKTOP-MSEMH7G" time="0.039">
-  <properties/>
-  <testcase name="Should return an bad request response when the credentials are incorrect" classname="org.example.controller.LoginControllerTest" time="0.031"/>
-  <testcase name="Should return a bad request response when the login request is invalid" classname="org.example.controller.LoginControllerTest" time="0.004"/>
-  <testcase name="Should return a valid login response when the credentials are correct" classname="org.example.controller.LoginControllerTest" time="0.003"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

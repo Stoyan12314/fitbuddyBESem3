@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.example.buisness.impl.UserManagerImplTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-06-09T16:58:37" hostname="DESKTOP-MSEMH7G" time="0.116">
-  <properties/>
-  <testcase name="Should return the user when the user with the given id exists" classname="org.example.buisness.impl.UserManagerImplTest" time="0.112"/>
-  <testcase name="Should return an empty optional when the user with the given id does not exist" classname="org.example.buisness.impl.UserManagerImplTest" time="0.003"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

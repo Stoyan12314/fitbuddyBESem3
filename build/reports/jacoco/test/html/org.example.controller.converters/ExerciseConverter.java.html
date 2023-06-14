@@ -14,7 +14,7 @@ public class ExerciseConverter {
     }
 
     public static Page&lt;Exercise&gt; convertList(Page&lt;ExerciseEntity&gt; exercises) {
-<span class="nc" id="L17">        return exercises.map(exercise -&gt; Exercise.builder()</span>
+<span class="pc" id="L17">        return exercises.map(exercise -&gt; Exercise.builder()</span>
 <span class="nc" id="L18">                .id(exercise.getId())</span>
 <span class="nc" id="L19">                .name(exercise.getName())</span>
 <span class="nc" id="L20">                .imageUrl(exercise.getImageUrl()) // Add imageUrl</span>

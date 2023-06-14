@@ -31,18 +31,18 @@ public class ExerciseManagerImpl implements ExerciseManager {
 
     @Override
     public Page&lt;Exercise&gt; getExercises(String name, Pageable pageable) {
-<span class="nc bnc" id="L34" title="All 4 branches missed.">        if (name == null || name.trim().isEmpty()) {</span>
-<span class="nc" id="L35">            return ExerciseConverter.convertList(exerciseRepo.findAll(pageable));</span>
+<span class="pc bpc" id="L34" title="1 of 4 branches missed.">        if (name == null || name.trim().isEmpty()) {</span>
+<span class="fc" id="L35">            return ExerciseConverter.convertList(exerciseRepo.findAll(pageable));</span>
         } else {
-<span class="nc" id="L37">            return ExerciseConverter.convertList(exerciseRepo.findByName(name, pageable));</span>
+<span class="fc" id="L37">            return ExerciseConverter.convertList(exerciseRepo.findByName(name, pageable));</span>
         }
     }
 
     @Override
     public void deleteExerciseById(long exerciseId) {
 
-<span class="nc" id="L44">        exerciseRepo.deleteExercise(exerciseId);</span>
-<span class="nc" id="L45">    }</span>
+<span class="fc" id="L44">        exerciseRepo.deleteExercise(exerciseId);</span>
+<span class="fc" id="L45">    }</span>
 
     @Override
     public Long createExercise(Exercise request)
@@ -58,12 +58,12 @@ public class ExerciseManagerImpl implements ExerciseManager {
     @Override
     public void updateExercise(UpdateExerciseRequest exercise) {
 
-<span class="nc" id="L61">        exerciseRepo.updateExercise(exercise);</span>
-<span class="nc" id="L62">    }</span>
+<span class="fc" id="L61">        exerciseRepo.updateExercise(exercise);</span>
+<span class="fc" id="L62">    }</span>
 
     @Override
     public void deleteExercise(long exerciseId) {
-<span class="nc" id="L66">        exerciseRepo.deleteExercise(exerciseId);</span>
-<span class="nc" id="L67">    }</span>
+<span class="fc" id="L66">        exerciseRepo.deleteExercise(exerciseId);</span>
+<span class="fc" id="L67">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

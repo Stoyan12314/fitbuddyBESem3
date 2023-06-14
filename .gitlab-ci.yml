@@ -1,3 +1,27 @@
+#variables:
+#  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+#
+#stages:
+#  - build
+#  - test
+#  - sonarqube
+#
+#build:
+#  stage: build
+#  script:
+#    - ./gradlew assemble
+#
+#test:
+#  stage: test
+#  script:
+#    - ./gradlew test
+#
+#sonarqube:
+#  stage: sonarqube
+#  script:
+#    - ./gradlew sonarqube
+
+
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
@@ -5,6 +29,7 @@ stages:
   - build
   - test
   - sonarqube
+  - dockerize
 
 build:
   stage: build
@@ -20,3 +45,14 @@ sonarqube:
   stage: sonarqube
   script:
     - ./gradlew sonarqube
+
+dockerize:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: dockerize
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
